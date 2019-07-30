@@ -69,7 +69,7 @@ public indirect enum JSON {
     case is NSNull:
       return JSON.null
     default:
-      throw JSONError.nonEncodable(object)
+      return JSON.string(object.description)
     }
   }
 
