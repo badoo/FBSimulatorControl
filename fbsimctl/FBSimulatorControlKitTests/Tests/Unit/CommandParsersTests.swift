@@ -396,3 +396,35 @@ class CommandParserTests: XCTestCase {
     return Array(compoundComponents.joined(separator: ["--"]))
   }
 }
+
+class UdidParserTests: XCTestCase {
+  func testParseDeviceOldTypeUdid() {
+    let udid = "311f78b30331ef1c723fdf302f6916149bd1472f"
+
+    let (_, parsed) = try! FBiOSTargetQueryParsers.uuidParser.parse([udid])
+
+    XCTAssertEqual(parsed.udids.first!, udid, "Old type UDID parsing failed")
+  }
+
+  func testParseDeviceNewTypeUdid() {
+    let udid = "00008020-01293D36AAD825DC"
+
+    let (_, parsed) = try! FBiOSTargetQueryParsers.uuidParser.parse([udid])
+
+    XCTAssertEqual(parsed.udids.first!, udid, "New type UDID parsing failed")
+  }
+
+  func testParseSimulatorUdid() {
+    let udid = "124BA873-85EE-4C76-BDA3-82C881F767C4"
+
+    let (_, parsed) = try! FBiOSTargetQueryParsers.uuidParser.parse([udid])
+
+    XCTAssertEqual(parsed.udids.first!, udid, "Simulator type UDID parsing failed")
+  }
+
+  func testThrowsParsingNotUdidString() {
+    let notUdid = "ZZZ"
+
+    XCTAssertThrowsError(try FBiOSTargetQueryParsers.uuidParser.parse([notUdid]))
+  }
+}

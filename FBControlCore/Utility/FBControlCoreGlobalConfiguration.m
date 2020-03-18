@@ -31,7 +31,7 @@ static id<FBControlCoreLogger> logger;
 
 + (NSTimeInterval)slowTimeout
 {
-  return 120;
+  return 180;
 }
 
 + (id<FBControlCoreLogger>)defaultLogger

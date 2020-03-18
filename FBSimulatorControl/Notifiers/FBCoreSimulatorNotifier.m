@@ -44,11 +44,22 @@
   }
 
   _notifier = notifier;
-  _handle = [notifier registerNotificationHandler:^(NSDictionary *info) {
-    dispatch_async(queue, ^{
-      block(info);
-    });
-  }];
+    
+  BOOL isNewApi = [(NSObject *)notifier respondsToSelector:@selector(registerNotificationHandlerOnQueue:handler:)];
+  
+  if (isNewApi) {
+    _handle = [notifier registerNotificationHandlerOnQueue:queue handler:^(NSDictionary *info) {
+      dispatch_async(queue, ^{
+        block(info);
+      });
+    }];
+  } else {
+    _handle = [notifier registerNotificationHandler:^(NSDictionary *info) {
+      dispatch_async(queue, ^{
+        block(info);
+      });
+    }];
+  }
 
   return self;
 }

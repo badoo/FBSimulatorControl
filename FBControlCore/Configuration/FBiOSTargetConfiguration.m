@@ -26,6 +26,9 @@ FBDeviceModel const FBDeviceModeliPhoneX = @"iPhone X";
 FBDeviceModel const FBDeviceModeliPhoneXs = @"iPhone Xs";
 FBDeviceModel const FBDeviceModeliPhoneXsMax = @"iPhone Xs Max";
 FBDeviceModel const FBDeviceModeliPhoneXr = @"iPhone Xʀ";
+FBDeviceModel const FBDeviceModeliPhone11 = @"iPhone 11";
+FBDeviceModel const FBDeviceModeliPhone11Pro = @"iPhone 11 Pro";
+FBDeviceModel const FBDeviceModeliPhone11ProMax = @"iPhone 11 Pro Max";
 FBDeviceModel const FBDeviceModeliPad2 = @"iPad 2";
 FBDeviceModel const FBDeviceModeliPadRetina = @"iPad Retina";
 FBDeviceModel const FBDeviceModeliPadAir = @"iPad Air";
@@ -51,6 +54,8 @@ FBDeviceModel const FBDeviceModelAppleWatchSeries3_38mm = @"Apple Watch Series 3
 FBDeviceModel const FBDeviceModelAppleWatchSeries3_42mm = @"Apple Watch Series 3 - 42mm";
 FBDeviceModel const FBDeviceModelAppleWatchSeries4_40mm = @"Apple Watch Series 4 - 40mm";
 FBDeviceModel const FBDeviceModelAppleWatchSeries4_44mm = @"Apple Watch Series 4 - 44mm";
+FBDeviceModel const FBDeviceModelAppleWatchSeries5_40mm = @"Apple Watch Series 5 - 40mm";
+FBDeviceModel const FBDeviceModelAppleWatchSeries5_44mm = @"Apple Watch Series 5 - 44mm";
 
 
 FBOSVersionName const FBOSVersionNameiOS_7_1 = @"iOS 7.1";
@@ -77,6 +82,12 @@ FBOSVersionName const FBOSVersionNameiOS_11_3 = @"iOS 11.3";
 FBOSVersionName const FBOSVersionNameiOS_11_4 = @"iOS 11.4";
 FBOSVersionName const FBOSVersionNameiOS_12_0 = @"iOS 12.0";
 FBOSVersionName const FBOSVersionNameiOS_12_1 = @"iOS 12.1";
+FBOSVersionName const FBOSVersionNameiOS_12_2 = @"iOS 12.2";
+FBOSVersionName const FBOSVersionNameiOS_12_4 = @"iOS 12.4";
+FBOSVersionName const FBOSVersionNameiOS_13_0 = @"iOS 13.0";
+FBOSVersionName const FBOSVersionNameiOS_13_1 = @"iOS 13.1";
+FBOSVersionName const FBOSVersionNameiOS_13_2 = @"iOS 13.2";
+FBOSVersionName const FBOSVersionNameiOS_13_3 = @"iOS 13.3";
 FBOSVersionName const FBOSVersionNametvOS_9_0 = @"tvOS 9.0";
 FBOSVersionName const FBOSVersionNametvOS_9_1 = @"tvOS 9.1";
 FBOSVersionName const FBOSVersionNametvOS_9_2 = @"tvOS 9.2";
@@ -90,6 +101,11 @@ FBOSVersionName const FBOSVersionNametvOS_11_3 = @"tvOS 11.3";
 FBOSVersionName const FBOSVersionNametvOS_11_4 = @"tvOS 11.4";
 FBOSVersionName const FBOSVersionNametvOS_12_0 = @"tvOS 12.0";
 FBOSVersionName const FBOSVersionNametvOS_12_1 = @"tvOS 12.1";
+FBOSVersionName const FBOSVersionNametvOS_12_2 = @"tvOS 12.2";
+FBOSVersionName const FBOSVersionNametvOS_12_4 = @"tvOS 12.4";
+FBOSVersionName const FBOSVersionNametvOS_13_0 = @"tvOS 13.0";
+FBOSVersionName const FBOSVersionNametvOS_13_2 = @"tvOS 13.2";
+FBOSVersionName const FBOSVersionNametvOS_13_3 = @"tvOS 13.3";
 FBOSVersionName const FBOSVersionNamewatchOS_2_0 = @"watchOS 2.0";
 FBOSVersionName const FBOSVersionNamewatchOS_2_1 = @"watchOS 2.1";
 FBOSVersionName const FBOSVersionNamewatchOS_2_2 = @"watchOS 2.2";
@@ -101,6 +117,10 @@ FBOSVersionName const FBOSVersionNamewatchOS_4_1 = @"watchOS 4.1";
 FBOSVersionName const FBOSVersionNamewatchOS_4_2 = @"watchOS 4.2";
 FBOSVersionName const FBOSVersionNamewatchOS_5_0 = @"watchOS 5.0";
 FBOSVersionName const FBOSVersionNamewatchOS_5_1 = @"watchOS 5.1";
+FBOSVersionName const FBOSVersionNamewatchOS_5_2 = @"watchOS 5.2";
+FBOSVersionName const FBOSVersionNamewatchOS_5_3 = @"watchOS 5.3";
+FBOSVersionName const FBOSVersionNamewatchOS_6_0 = @"watchOS 6.0";
+FBOSVersionName const FBOSVersionNamewatchOS_6_1 = @"watchOS 6.1";
 
 @implementation FBiOSTargetScreenInfo
 
@@ -333,12 +353,15 @@ FBOSVersionName const FBOSVersionNamewatchOS_5_1 = @"watchOS 5.1";
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhoneSE productType:@"iPhone8,4" deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone7 productTypes:@[@"iPhone9,1", @"iPhone9,2"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone7Plus productTypes:@[@"iPhone9,2", @"iPhone9,4"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
-      [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone8 productTypes:@[@"iPhone10,1", @"Phone10,4"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
+      [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone8 productTypes:@[@"iPhone10,1", @"iPhone10,4"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone8Plus productTypes:@[@"iPhone10,2", @"iPhone10,5"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhoneX productTypes:@[@"iPhone10,3", @"iPhone10,6"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhoneXs productTypes:@[@"iPhone11,2"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhoneXsMax productTypes:@[@"iPhone11,6"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhoneXr productTypes:@[@"iPhone11,8"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
+      [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone11 productTypes:@[@"iPhone12,1"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
+      [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone11Pro productTypes:@[@"iPhone12,3"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
+      [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone11ProMax productTypes:@[@"iPhone12,5"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPadWithModel:FBDeviceModeliPad2 productTypes:@[@"iPad2,1", @"iPad2,2", @"iPad2,3", @"iPad2,4"] deviceArchitecture:FBArchitectureArmv7 simulatorArchitecture:FBArchitectureI386],
       [FBDeviceType iPadWithModel:FBDeviceModeliPadRetina productTypes:@[@"iPad3,1", @"iPad3,2", @"iPad3,3", @"iPad3,4", @"iPad3,5", @"iPad3,6"] deviceArchitecture:FBArchitectureArmv7 simulatorArchitecture:FBArchitectureI386],
       [FBDeviceType iPadWithModel:FBDeviceModeliPadAir productTypes:@[@"iPad4,1", @"iPad4,2", @"iPad4,3"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
@@ -361,8 +384,10 @@ FBOSVersionName const FBOSVersionNamewatchOS_5_1 = @"watchOS 5.1";
       [FBDeviceType watchWithModel:FBDeviceModelAppleWatchSeries2_42mm productTypes:@[@"Watch2,2"] deviceArchitecture:FBArchitectureArmv7 simulatorArchitecture:FBArchitectureI386],
       [FBDeviceType watchWithModel:FBDeviceModelAppleWatchSeries3_38mm productTypes:@[@"Watch3,1"] deviceArchitecture:FBArchitectureArmv7 simulatorArchitecture:FBArchitectureI386],
       [FBDeviceType watchWithModel:FBDeviceModelAppleWatchSeries3_42mm productTypes:@[@"Watch3,2"] deviceArchitecture:FBArchitectureArmv7 simulatorArchitecture:FBArchitectureI386],
-      [FBDeviceType watchWithModel:FBDeviceModelAppleWatchSeries4_40mm productTypes:@[@"Watch4,1", @"Watch4,3"] deviceArchitecture:FBArchitectureArmv7 simulatorArchitecture:FBArchitectureI386],
-      [FBDeviceType watchWithModel:FBDeviceModelAppleWatchSeries4_44mm productTypes:@[@"Watch4,2 ", @"Watch4,4"] deviceArchitecture:FBArchitectureArmv7 simulatorArchitecture:FBArchitectureI386],
+      [FBDeviceType watchWithModel:FBDeviceModelAppleWatchSeries4_40mm productTypes:@[@"Watch4,1", @"Watch4,3"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureI386],
+      [FBDeviceType watchWithModel:FBDeviceModelAppleWatchSeries4_44mm productTypes:@[@"Watch4,2", @"Watch4,4"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureI386],
+      [FBDeviceType watchWithModel:FBDeviceModelAppleWatchSeries4_40mm productTypes:@[@"Watch5,1", @"Watch5,3"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureI386],
+      [FBDeviceType watchWithModel:FBDeviceModelAppleWatchSeries4_44mm productTypes:@[@"Watch5,2", @"Watch5,4"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureI386],
     ];
   });
   return deviceConfigurations;
@@ -399,6 +424,12 @@ FBOSVersionName const FBOSVersionNamewatchOS_5_1 = @"watchOS 5.1";
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_11_4],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_12_0],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_12_1],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_12_2],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_12_4],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_13_0],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_13_1],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_13_2],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_13_3],
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_9_0],
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_9_1],
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_9_2],
@@ -412,6 +443,11 @@ FBOSVersionName const FBOSVersionNamewatchOS_5_1 = @"watchOS 5.1";
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_11_4],
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_12_0],
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_12_1],
+      [FBOSVersion tvOSWithName:FBOSVersionNametvOS_12_2],
+      [FBOSVersion tvOSWithName:FBOSVersionNametvOS_12_4],
+      [FBOSVersion tvOSWithName:FBOSVersionNametvOS_13_0],
+      [FBOSVersion tvOSWithName:FBOSVersionNametvOS_13_2],
+      [FBOSVersion tvOSWithName:FBOSVersionNametvOS_13_3],
       [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_2_0],
       [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_2_1],
       [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_2_2],
@@ -423,6 +459,10 @@ FBOSVersionName const FBOSVersionNamewatchOS_5_1 = @"watchOS 5.1";
       [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_4_2],
       [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_5_0],
       [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_5_1],
+      [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_5_2],
+      [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_5_3],
+      [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_6_0],
+      [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_6_1],
     ];
   });
   return OSConfigurations;

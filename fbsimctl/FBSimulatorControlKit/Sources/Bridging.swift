@@ -14,19 +14,36 @@ extension FBiOSTargetState {
   }
 }
 
+private enum UdidRegex: String {
+  case Udid25 = "[[:xdigit:]]{4,8}-[[:xdigit:]]{16}"
+  case Udid40 = "[[:xdigit:]]{40}"
+}
+
+extension UdidRegex: CaseIterable {}
+
+extension UdidRegex {
+  static func matchesAny(_ udidString: String) -> Bool {
+    let range = NSRange(location: 0, length: udidString.count)
+    let udidRegex = try! NSRegularExpression(pattern: regexMatchingAny())
+
+    return udidRegex.firstMatch(in: udidString, options: [], range: range) != nil
+  }
+
+  private static func regexMatchingAny() -> String {
+    return allCases.map { $0.rawValue }.joined(separator:"|")
+  }
+}
+
 extension FBiOSTargetQuery {
   static func parseUDIDToken(_ token: String) throws -> String {
     if let _ = UUID(uuidString: token) {
       return token
     }
-    if token.count != 40 {
-      throw ParseError.couldNotInterpret("UDID is not 40 characters long", token)
+
+    if !UdidRegex.matchesAny(token) {
+      throw ParseError.couldNotInterpret("Does not match UDID pattern", token)
     }
-    let nonDeviceUDIDSet = CharacterSet(charactersIn: "0123456789ABCDEFabcdef").inverted
-    if let range = token.rangeOfCharacter(from: nonDeviceUDIDSet) {
-      let invalidCharacters = token.substring(with: range)
-      throw ParseError.couldNotInterpret("UDID contains non-hex character '\(invalidCharacters)'", token)
-    }
+
     return token
   }
 }
