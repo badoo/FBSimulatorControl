@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -21,6 +21,7 @@ typedef NS_ENUM(NSUInteger, FBControlCoreProductFamily) {
   FBControlCoreProductFamilyiPad = 2,
   FBControlCoreProductFamilyAppleTV = 3,
   FBControlCoreProductFamilyAppleWatch = 4,
+  FBControlCoreProductFamilyMac = 5,
 };
 
 /**
@@ -36,7 +37,8 @@ extern FBDeviceModel const FBDeviceModeliPhone6;
 extern FBDeviceModel const FBDeviceModeliPhone6Plus;
 extern FBDeviceModel const FBDeviceModeliPhone6S;
 extern FBDeviceModel const FBDeviceModeliPhone6SPlus;
-extern FBDeviceModel const FBDeviceModeliPhoneSE;
+extern FBDeviceModel const FBDeviceModeliPhoneSE_1stGeneration;
+extern FBDeviceModel const FBDeviceModeliPhoneSE_2ndGeneration;
 extern FBDeviceModel const FBDeviceModeliPhone7;
 extern FBDeviceModel const FBDeviceModeliPhone7Plus;
 extern FBDeviceModel const FBDeviceModeliPhone8;
@@ -49,15 +51,22 @@ extern FBDeviceModel const FBDeviceModeliPhone11;
 extern FBDeviceModel const FBDeviceModeliPhone11Pro;
 extern FBDeviceModel const FBDeviceModeliPhone11ProMax;
 extern FBDeviceModel const FBDeviceModeliPad2;
+extern FBDeviceModel const FBDeviceModeliPad_6thGeneration;
+extern FBDeviceModel const FBDeviceModeliPad_7thGeneration;
 extern FBDeviceModel const FBDeviceModeliPadRetina;
 extern FBDeviceModel const FBDeviceModeliPadAir;
 extern FBDeviceModel const FBDeviceModeliPadAir2;
+extern FBDeviceModel const FBDeviceModeliPadAir_3rdGeneration;
 extern FBDeviceModel const FBDeviceModeliPadPro;
 extern FBDeviceModel const FBDeviceModeliPadPro_9_7_Inch;
 extern FBDeviceModel const FBDeviceModeliPadPro_12_9_Inch;
 extern FBDeviceModel const FBDeviceModeliPadPro_9_7_Inch_2ndGeneration;
 extern FBDeviceModel const FBDeviceModeliPadPro_12_9_Inch_2ndGeneration;
+extern FBDeviceModel const FBDeviceModeliPadPro_12_9_Inch_3rdGeneration;
+extern FBDeviceModel const FBDeviceModeliPadPro_12_9_Inch_4thGeneration;
 extern FBDeviceModel const FBDeviceModeliPadPro_10_5_Inch;
+extern FBDeviceModel const FBDeviceModeliPadPro_11_Inch_1stGeneration;
+extern FBDeviceModel const FBDeviceModeliPadPro_11_Inch_2ndGeneration;
 extern FBDeviceModel const FBDeviceModelAppleTV;
 extern FBDeviceModel const FBDeviceModelAppleTV4K;
 extern FBDeviceModel const FBDeviceModelAppleTV4KAt1080p;
@@ -103,6 +112,7 @@ extern FBOSVersionName const FBOSVersionNameiOS_13_1;
 extern FBOSVersionName const FBOSVersionNameiOS_13_2;
 extern FBOSVersionName const FBOSVersionNameiOS_13_3;
 extern FBOSVersionName const FBOSVersionNameiOS_13_4;
+extern FBOSVersionName const FBOSVersionNameiOS_13_5;
 extern FBOSVersionName const FBOSVersionNametvOS_9_0;
 extern FBOSVersionName const FBOSVersionNametvOS_9_1;
 extern FBOSVersionName const FBOSVersionNametvOS_9_2;
@@ -137,6 +147,8 @@ extern FBOSVersionName const FBOSVersionNamewatchOS_5_2;
 extern FBOSVersionName const FBOSVersionNamewatchOS_5_3;
 extern FBOSVersionName const FBOSVersionNamewatchOS_6_0;
 extern FBOSVersionName const FBOSVersionNamewatchOS_6_1;
+extern FBOSVersionName const FBOSVersionNamewatchOS_6_2;
+extern FBOSVersionName const FBOSVersionNamemac;
 
 #pragma mark Screen
 
