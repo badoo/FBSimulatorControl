@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -89,6 +89,7 @@ FBOSVersionName const FBOSVersionNameiOS_13_1 = @"iOS 13.1";
 FBOSVersionName const FBOSVersionNameiOS_13_2 = @"iOS 13.2";
 FBOSVersionName const FBOSVersionNameiOS_13_3 = @"iOS 13.3";
 FBOSVersionName const FBOSVersionNameiOS_13_4 = @"iOS 13.4";
+FBOSVersionName const FBOSVersionNameiOS_13_5 = @"iOS 13.5";
 FBOSVersionName const FBOSVersionNametvOS_9_0 = @"tvOS 9.0";
 FBOSVersionName const FBOSVersionNametvOS_9_1 = @"tvOS 9.1";
 FBOSVersionName const FBOSVersionNametvOS_9_2 = @"tvOS 9.2";
@@ -123,6 +124,8 @@ FBOSVersionName const FBOSVersionNamewatchOS_5_2 = @"watchOS 5.2";
 FBOSVersionName const FBOSVersionNamewatchOS_5_3 = @"watchOS 5.3";
 FBOSVersionName const FBOSVersionNamewatchOS_6_0 = @"watchOS 6.0";
 FBOSVersionName const FBOSVersionNamewatchOS_6_1 = @"watchOS 6.1";
+FBOSVersionName const FBOSVersionNamewatchOS_6_2 = @"watchOS 6.2";
+FBOSVersionName const FBOSVersionNamemac = @"macOS";
 
 @implementation FBiOSTargetScreenInfo
 
@@ -332,6 +335,11 @@ FBOSVersionName const FBOSVersionNamewatchOS_6_1 = @"watchOS 6.1";
   return [[self alloc] initWithName:name families:[NSSet setWithObject:@(FBControlCoreProductFamilyAppleWatch)]];
 }
 
++ (instancetype)macOSWithName:(FBOSVersionName)name
+{
+  return [[self alloc] initWithName:name families:[NSSet setWithObject:@(FBControlCoreProductFamilyMac)]];
+}
+
 @end
 
 @implementation FBiOSTargetConfiguration
@@ -351,7 +359,7 @@ FBOSVersionName const FBOSVersionNamewatchOS_6_1 = @"watchOS 6.1";
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone6 productType:@"iPhone7,2" deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone6Plus productType:@"iPhone7,1" deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone6S productType:@"iPhone8,1" deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
-      [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone6SPlus productType:@"@iPhone8,2" deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
+      [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone6SPlus productType:@"iPhone8,2" deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhoneSE productType:@"iPhone8,4" deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone7 productTypes:@[@"iPhone9,1", @"iPhone9,2"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone7Plus productTypes:@[@"iPhone9,2", @"iPhone9,4"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
@@ -467,6 +475,7 @@ FBOSVersionName const FBOSVersionNamewatchOS_6_1 = @"watchOS 6.1";
       [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_5_3],
       [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_6_0],
       [FBOSVersion tvOSWithName:FBOSVersionNamewatchOS_6_1],
+      [FBOSVersion macOSWithName:FBOSVersionNamemac],
     ];
   });
   return OSConfigurations;

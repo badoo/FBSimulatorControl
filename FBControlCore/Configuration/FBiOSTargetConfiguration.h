@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -21,6 +21,7 @@ typedef NS_ENUM(NSUInteger, FBControlCoreProductFamily) {
   FBControlCoreProductFamilyiPad = 2,
   FBControlCoreProductFamilyAppleTV = 3,
   FBControlCoreProductFamilyAppleWatch = 4,
+  FBControlCoreProductFamilyMac = 5,
 };
 
 /**
@@ -103,6 +104,7 @@ extern FBOSVersionName const FBOSVersionNameiOS_13_1;
 extern FBOSVersionName const FBOSVersionNameiOS_13_2;
 extern FBOSVersionName const FBOSVersionNameiOS_13_3;
 extern FBOSVersionName const FBOSVersionNameiOS_13_4;
+extern FBOSVersionName const FBOSVersionNameiOS_13_5;
 extern FBOSVersionName const FBOSVersionNametvOS_9_0;
 extern FBOSVersionName const FBOSVersionNametvOS_9_1;
 extern FBOSVersionName const FBOSVersionNametvOS_9_2;
@@ -137,6 +139,8 @@ extern FBOSVersionName const FBOSVersionNamewatchOS_5_2;
 extern FBOSVersionName const FBOSVersionNamewatchOS_5_3;
 extern FBOSVersionName const FBOSVersionNamewatchOS_6_0;
 extern FBOSVersionName const FBOSVersionNamewatchOS_6_1;
+extern FBOSVersionName const FBOSVersionNamewatchOS_6_2;
+extern FBOSVersionName const FBOSVersionNamemac;
 
 #pragma mark Screen
 
