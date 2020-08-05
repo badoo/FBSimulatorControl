@@ -95,6 +95,7 @@ FBOSVersionName const FBOSVersionNameiOS_13_2 = @"iOS 13.2";
 FBOSVersionName const FBOSVersionNameiOS_13_3 = @"iOS 13.3";
 FBOSVersionName const FBOSVersionNameiOS_13_4 = @"iOS 13.4";
 FBOSVersionName const FBOSVersionNameiOS_13_5 = @"iOS 13.5";
+FBOSVersionName const FBOSVersionNameiOS_13_6 = @"iOS 13.6";
 FBOSVersionName const FBOSVersionNameiOS_14_0 = @"iOS 14.0";
 FBOSVersionName const FBOSVersionNametvOS_9_0 = @"tvOS 9.0";
 FBOSVersionName const FBOSVersionNametvOS_9_1 = @"tvOS 9.1";
@@ -455,6 +456,7 @@ FBOSVersionName const FBOSVersionNamemac = @"macOS";
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_13_3],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_13_4],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_13_5],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_13_6],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_14_0],
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_9_0],
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_9_1],
