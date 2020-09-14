@@ -34,7 +34,7 @@
 #import "FBTestDaemonResult.h"
 #import "FBTestApplicationLaunchStrategy.h"
 
-const NSInteger FBProtocolVersion = 0x16;
+const NSInteger FBProtocolVersion = 0x1E;
 const NSInteger FBProtocolMinimumVersion = 0x8;
 
 @interface FBTestManagerAPIMediator () <XCTestManager_IDEInterface>
