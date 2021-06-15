@@ -331,7 +331,7 @@
 + (NSSet<Class> *)statefulCommands
 {
   static dispatch_once_t onceToken;
-  static NSSet<NSString *> *statefulCommands;
+  static NSSet<Class> *statefulCommands;
   dispatch_once(&onceToken, ^{
     statefulCommands = [NSSet setWithArray:@[
       FBSimulatorCrashLogCommands.class,
