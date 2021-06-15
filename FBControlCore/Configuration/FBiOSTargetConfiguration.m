@@ -109,6 +109,20 @@ FBOSVersionName const FBOSVersionNameiOS_14_2 = @"iOS 14.2";
 FBOSVersionName const FBOSVersionNameiOS_14_3 = @"iOS 14.3";
 FBOSVersionName const FBOSVersionNameiOS_14_4 = @"iOS 14.4";
 FBOSVersionName const FBOSVersionNameiOS_14_5 = @"iOS 14.5";
+FBOSVersionName const FBOSVersionNameiOS_14_6 = @"iOS 14.6";
+FBOSVersionName const FBOSVersionNameiOS_14_7 = @"iOS 14.7";
+FBOSVersionName const FBOSVersionNameiOS_14_8 = @"iOS 14.8";
+FBOSVersionName const FBOSVersionNameiOS_14_9 = @"iOS 14.9";
+FBOSVersionName const FBOSVersionNameiOS_15_0 = @"iOS 15.0";
+FBOSVersionName const FBOSVersionNameiOS_15_1 = @"iOS 15.1";
+FBOSVersionName const FBOSVersionNameiOS_15_2 = @"iOS 15.2";
+FBOSVersionName const FBOSVersionNameiOS_15_3 = @"iOS 15.3";
+FBOSVersionName const FBOSVersionNameiOS_15_4 = @"iOS 15.4";
+FBOSVersionName const FBOSVersionNameiOS_15_5 = @"iOS 15.5";
+FBOSVersionName const FBOSVersionNameiOS_15_6 = @"iOS 15.6";
+FBOSVersionName const FBOSVersionNameiOS_15_7 = @"iOS 15.7";
+FBOSVersionName const FBOSVersionNameiOS_15_8 = @"iOS 15.8";
+FBOSVersionName const FBOSVersionNameiOS_15_9 = @"iOS 15.9";
 FBOSVersionName const FBOSVersionNametvOS_9_0 = @"tvOS 9.0";
 FBOSVersionName const FBOSVersionNametvOS_9_1 = @"tvOS 9.1";
 FBOSVersionName const FBOSVersionNametvOS_9_2 = @"tvOS 9.2";
@@ -482,6 +496,20 @@ FBOSVersionName const FBOSVersionNamemac = @"macOS";
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_14_3],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_14_4],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_14_5],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_14_6],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_14_7],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_14_8],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_14_9],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_15_0],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_15_1],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_15_2],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_15_3],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_15_4],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_15_5],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_15_6],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_15_7],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_15_8],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_15_9],
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_9_0],
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_9_1],
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_9_2],
