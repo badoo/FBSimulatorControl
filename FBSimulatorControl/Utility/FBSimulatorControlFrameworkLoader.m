@@ -13,12 +13,12 @@
 
 static void FBSimulatorControl_SimLogHandler(int level, const char *function, int lineNumber, NSString *format, ...)
 {
-  va_list args;
-  va_start(args, format);
-  NSString *string = [[NSString alloc] initWithFormat:format arguments:args];
-  va_end(args);
-  id<FBControlCoreLogger> logger = [FBControlCoreGlobalConfiguration.defaultLogger withName:@"CoreSimulator"];
-  [logger log:string];
+
+//  va_list args;
+//  va_start(args, format);
+//  NSString *string = [[NSString alloc] initWithFormat:format arguments:args];
+//  va_end(args);
+//  [logger log:string];
 }
 
 @interface FBSimulatorControlFrameworkLoader_Essential : FBSimulatorControlFrameworkLoader
