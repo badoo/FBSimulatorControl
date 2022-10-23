@@ -21,6 +21,7 @@
     struct __AXObserver *_axEventObserver;
     CLSimulationManager *_locationSimulationManager;
 }
+struct __AXUIElement;
 
 @property(retain, nonatomic) CLSimulationManager *locationSimulationManager; // @synthesize locationSimulationManager=_locationSimulationManager;
 @property(nonatomic) struct __AXObserver *axEventObserver; // @synthesize axEventObserver=_axEventObserver;
