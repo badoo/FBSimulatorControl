@@ -39,6 +39,7 @@ extern FBDeviceModel const FBDeviceModeliPhone6S;
 extern FBDeviceModel const FBDeviceModeliPhone6SPlus;
 extern FBDeviceModel const FBDeviceModeliPhoneSE_1stGeneration;
 extern FBDeviceModel const FBDeviceModeliPhoneSE_2ndGeneration;
+extern FBDeviceModel const FBDeviceModeliPhoneSE_3rdGeneration;
 extern FBDeviceModel const FBDeviceModeliPhone7;
 extern FBDeviceModel const FBDeviceModeliPhone7Plus;
 extern FBDeviceModel const FBDeviceModeliPhone8;
@@ -50,10 +51,22 @@ extern FBDeviceModel const FBDeviceModeliPhoneXr;
 extern FBDeviceModel const FBDeviceModeliPhone11;
 extern FBDeviceModel const FBDeviceModeliPhone11Pro;
 extern FBDeviceModel const FBDeviceModeliPhone11ProMax;
+
 extern FBDeviceModel const FBDeviceModeliPhone12mini;
 extern FBDeviceModel const FBDeviceModeliPhone12;
 extern FBDeviceModel const FBDeviceModeliPhone12Pro;
 extern FBDeviceModel const FBDeviceModeliPhone12ProMax;
+
+extern FBDeviceModel const FBDeviceModeliPhone13mini;
+extern FBDeviceModel const FBDeviceModeliPhone13;
+extern FBDeviceModel const FBDeviceModeliPhone13Pro;
+extern FBDeviceModel const FBDeviceModeliPhone13ProMax;
+
+extern FBDeviceModel const FBDeviceModeliPhone14;
+extern FBDeviceModel const FBDeviceModeliPhone14Plus;
+extern FBDeviceModel const FBDeviceModeliPhone14Pro;
+extern FBDeviceModel const FBDeviceModeliPhone14ProMax;
+
 extern FBDeviceModel const FBDeviceModeliPad2;
 extern FBDeviceModel const FBDeviceModeliPad_6thGeneration;
 extern FBDeviceModel const FBDeviceModeliPad_7thGeneration;
@@ -141,6 +154,17 @@ extern FBOSVersionName const FBOSVersionNameiOS_15_6;
 extern FBOSVersionName const FBOSVersionNameiOS_15_7;
 extern FBOSVersionName const FBOSVersionNameiOS_15_8;
 extern FBOSVersionName const FBOSVersionNameiOS_15_9;
+extern FBOSVersionName const FBOSVersionNameiOS_16_0;
+extern FBOSVersionName const FBOSVersionNameiOS_16_0_1;
+extern FBOSVersionName const FBOSVersionNameiOS_16_1;
+extern FBOSVersionName const FBOSVersionNameiOS_16_2;
+extern FBOSVersionName const FBOSVersionNameiOS_16_3;
+extern FBOSVersionName const FBOSVersionNameiOS_16_4;
+extern FBOSVersionName const FBOSVersionNameiOS_16_5;
+extern FBOSVersionName const FBOSVersionNameiOS_16_6;
+extern FBOSVersionName const FBOSVersionNameiOS_16_7;
+extern FBOSVersionName const FBOSVersionNameiOS_16_8;
+extern FBOSVersionName const FBOSVersionNameiOS_16_9;
 extern FBOSVersionName const FBOSVersionNametvOS_9_0;
 extern FBOSVersionName const FBOSVersionNametvOS_9_1;
 extern FBOSVersionName const FBOSVersionNametvOS_9_2;
