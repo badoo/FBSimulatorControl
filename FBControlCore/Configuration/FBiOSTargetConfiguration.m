@@ -47,6 +47,16 @@ FBDeviceModel const FBDeviceModeliPhone14Plus = @"iPhone 14 Plus";
 FBDeviceModel const FBDeviceModeliPhone14Pro = @"iPhone 14 Pro";
 FBDeviceModel const FBDeviceModeliPhone14ProMax = @"iPhone 14 Pro Max";
 
+FBDeviceModel const FBDeviceModeliPhone15 = @"iPhone 15";
+FBDeviceModel const FBDeviceModeliPhone15Plus = @"iPhone 15 Plus";
+FBDeviceModel const FBDeviceModeliPhone15Pro = @"iPhone 15 Pro";
+FBDeviceModel const FBDeviceModeliPhone15ProMax = @"iPhone 15 Pro Max";
+
+FBDeviceModel const FBDeviceModeliPhone16 = @"iPhone 16";
+FBDeviceModel const FBDeviceModeliPhone16Plus = @"iPhone 16 Plus";
+FBDeviceModel const FBDeviceModeliPhone16Pro = @"iPhone 16 Pro";
+FBDeviceModel const FBDeviceModeliPhone16ProMax = @"iPhone 16 Pro Max";
+
 FBDeviceModel const FBDeviceModeliPad2 = @"iPad 2";
 FBDeviceModel const FBDeviceModeliPadRetina = @"iPad Retina";
 FBDeviceModel const FBDeviceModeliPadAir = @"iPad Air";
@@ -147,6 +157,31 @@ FBOSVersionName const FBOSVersionNameiOS_16_6 = @"iOS 16.6";
 FBOSVersionName const FBOSVersionNameiOS_16_7 = @"iOS 16.7";
 FBOSVersionName const FBOSVersionNameiOS_16_8 = @"iOS 16.8";
 FBOSVersionName const FBOSVersionNameiOS_16_9 = @"iOS 16.9";
+
+FBOSVersionName const FBOSVersionNameiOS_17_0 = @"iOS 17.0";
+FBOSVersionName const FBOSVersionNameiOS_17_0_1 = @"iOS 17.0.1";
+FBOSVersionName const FBOSVersionNameiOS_17_1 = @"iOS 17.1";
+FBOSVersionName const FBOSVersionNameiOS_17_2 = @"iOS 17.2";
+FBOSVersionName const FBOSVersionNameiOS_17_3 = @"iOS 17.3";
+FBOSVersionName const FBOSVersionNameiOS_17_4 = @"iOS 17.4";
+FBOSVersionName const FBOSVersionNameiOS_17_5 = @"iOS 17.5";
+FBOSVersionName const FBOSVersionNameiOS_17_6 = @"iOS 17.6";
+FBOSVersionName const FBOSVersionNameiOS_17_7 = @"iOS 17.7";
+FBOSVersionName const FBOSVersionNameiOS_17_8 = @"iOS 17.8";
+FBOSVersionName const FBOSVersionNameiOS_17_9 = @"iOS 17.9";
+
+FBOSVersionName const FBOSVersionNameiOS_18_0 = @"iOS 18.0";
+FBOSVersionName const FBOSVersionNameiOS_18_0_1 = @"iOS 18.0.1";
+FBOSVersionName const FBOSVersionNameiOS_18_1 = @"iOS 18.1";
+FBOSVersionName const FBOSVersionNameiOS_18_2 = @"iOS 18.2";
+FBOSVersionName const FBOSVersionNameiOS_18_3 = @"iOS 18.3";
+FBOSVersionName const FBOSVersionNameiOS_18_4 = @"iOS 18.4";
+FBOSVersionName const FBOSVersionNameiOS_18_5 = @"iOS 18.5";
+FBOSVersionName const FBOSVersionNameiOS_18_6 = @"iOS 18.6";
+FBOSVersionName const FBOSVersionNameiOS_18_7 = @"iOS 18.7";
+FBOSVersionName const FBOSVersionNameiOS_18_8 = @"iOS 18.8";
+FBOSVersionName const FBOSVersionNameiOS_18_9 = @"iOS 18.9";
+
 FBOSVersionName const FBOSVersionNametvOS_9_0 = @"tvOS 9.0";
 FBOSVersionName const FBOSVersionNametvOS_9_1 = @"tvOS 9.1";
 FBOSVersionName const FBOSVersionNametvOS_9_2 = @"tvOS 9.2";
@@ -454,6 +489,12 @@ FBOSVersionName const FBOSVersionNamemac = @"macOS";
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone14Pro productTypes:@[@"iPhone15,2"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
       [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone14ProMax productTypes:@[@"iPhone15,3"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
 
+      // iPhone 15
+      [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone15 productTypes:@[@"iPhone15,4"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
+      [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone15Plus productTypes:@[@"iPhone15,4"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
+      [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone15Pro productTypes:@[@"iPhone16,1"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
+      [FBDeviceType iPhoneWithModel:FBDeviceModeliPhone15ProMax productTypes:@[@"iPhone16,2"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
+
       [FBDeviceType iPadWithModel:FBDeviceModeliPad2 productTypes:@[@"iPad2,1", @"iPad2,2", @"iPad2,3", @"iPad2,4"] deviceArchitecture:FBArchitectureArmv7 simulatorArchitecture:FBArchitectureI386],
       [FBDeviceType iPadWithModel:FBDeviceModeliPadRetina productTypes:@[@"iPad3,1", @"iPad3,2", @"iPad3,3", @"iPad3,4", @"iPad3,5", @"iPad3,6"] deviceArchitecture:FBArchitectureArmv7 simulatorArchitecture:FBArchitectureI386],
       [FBDeviceType iPadWithModel:FBDeviceModeliPadAir productTypes:@[@"iPad4,1", @"iPad4,2", @"iPad4,3"] deviceArchitecture:FBArchitectureArm64 simulatorArchitecture:FBArchitectureX86_64],
@@ -563,6 +604,31 @@ FBOSVersionName const FBOSVersionNamemac = @"macOS";
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_16_7],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_16_8],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_16_9],
+
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_17_0],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_17_0_1],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_17_1],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_17_2],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_17_3],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_17_4],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_17_5],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_17_6],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_17_7],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_17_8],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_17_9],
+
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_0],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_0_1],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_1],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_2],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_3],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_4],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_5],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_6],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_7],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_8],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_9],
+
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_9_0],
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_9_1],
       [FBOSVersion tvOSWithName:FBOSVersionNametvOS_9_2],
