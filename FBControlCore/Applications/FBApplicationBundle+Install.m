@@ -110,25 +110,25 @@ static BOOL deleteDirectory(NSURL *path)
 
 + (FBFutureContext<NSURL *> *)temporaryExtractPathWithQueue:(dispatch_queue_t)queue logger:(id<FBControlCoreLogger>)logger
 {
-  NSURL *temporaryPath = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:NSProcessInfo.processInfo.globallyUniqueString] isDirectory:YES];
   return [[FBFuture
     onQueue:queue resolve:^{
+      NSURL *temporaryPathURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:NSProcessInfo.processInfo.globallyUniqueString] isDirectory:YES];
       NSError *error = nil;
-      if (![NSFileManager.defaultManager createDirectoryAtURL:temporaryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+      if (![NSFileManager.defaultManager createDirectoryAtURL:temporaryPathURL withIntermediateDirectories:YES attributes:nil error:&error]) {
         return [[[FBControlCoreError
-          describeFormat:@"Could not create temporary directory for IPA extraction %@", temporaryPath]
+          describeFormat:@"Could not create temporary directory for IPA extraction %@", temporaryPathURL]
           causedBy:error]
           failFuture];
       }
-      return [FBFuture futureWithResult:temporaryPath];
+      return [FBFuture futureWithResult:temporaryPathURL];
     }]
-    onQueue:queue contextualTeardown:^(NSString *extractPath, FBFutureState __) {
-      [logger logFormat:@"Removing extracted directory %@", temporaryPath];
+    onQueue:queue contextualTeardown:^(NSURL *temporaryPathURL, FBFutureState __) {
+      [logger logFormat:@"Removing extracted directory %@", temporaryPathURL];
       NSError *innerError = nil;
-      if ([NSFileManager.defaultManager removeItemAtPath:extractPath error:&innerError]) {
-        [logger logFormat:@"Removed extracted directory %@", temporaryPath];
+      if ([NSFileManager.defaultManager removeItemAtURL:temporaryPathURL error:&innerError]) {
+        [logger logFormat:@"Removed extracted directory %@", temporaryPathURL];
       } else {
-        [logger logFormat:@"Failed to remove extracted directory %@ with error %@", temporaryPath, innerError];
+        [logger logFormat:@"Failed to remove extracted directory %@ with error %@", temporaryPathURL, innerError];
       }
     }];
 }
