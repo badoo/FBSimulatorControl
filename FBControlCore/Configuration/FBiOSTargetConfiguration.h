@@ -193,6 +193,8 @@ extern FBOSVersionName const FBOSVersionNameiOS_18_0_1;
 extern FBOSVersionName const FBOSVersionNameiOS_18_1;
 extern FBOSVersionName const FBOSVersionNameiOS_18_2;
 extern FBOSVersionName const FBOSVersionNameiOS_18_3;
+extern FBOSVersionName const FBOSVersionNameiOS_18_3_1;
+extern FBOSVersionName const FBOSVersionNameiOS_18_3_2;
 extern FBOSVersionName const FBOSVersionNameiOS_18_4;
 extern FBOSVersionName const FBOSVersionNameiOS_18_5;
 extern FBOSVersionName const FBOSVersionNameiOS_18_6;

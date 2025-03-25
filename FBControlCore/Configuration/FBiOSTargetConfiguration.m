@@ -175,6 +175,8 @@ FBOSVersionName const FBOSVersionNameiOS_18_0_1 = @"iOS 18.0.1";
 FBOSVersionName const FBOSVersionNameiOS_18_1 = @"iOS 18.1";
 FBOSVersionName const FBOSVersionNameiOS_18_2 = @"iOS 18.2";
 FBOSVersionName const FBOSVersionNameiOS_18_3 = @"iOS 18.3";
+FBOSVersionName const FBOSVersionNameiOS_18_3_1 = @"iOS 18.3.1";
+FBOSVersionName const FBOSVersionNameiOS_18_3_2 = @"iOS 18.3.2";
 FBOSVersionName const FBOSVersionNameiOS_18_4 = @"iOS 18.4";
 FBOSVersionName const FBOSVersionNameiOS_18_5 = @"iOS 18.5";
 FBOSVersionName const FBOSVersionNameiOS_18_6 = @"iOS 18.6";
@@ -622,6 +624,8 @@ FBOSVersionName const FBOSVersionNamemac = @"macOS";
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_1],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_2],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_3],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_3_1],
+      [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_3_2],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_4],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_5],
       [FBOSVersion iOSWithName:FBOSVersionNameiOS_18_6],
