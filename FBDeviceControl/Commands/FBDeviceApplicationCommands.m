@@ -31,7 +31,7 @@ static void InstallCallback(NSDictionary<NSString *, id> *callbackDictionary, FB
 
 static void TransferCallback(NSDictionary<NSString *, id> *callbackDictionary, FBAMDevice *device)
 {
-  [device.logger logFormat:@"Transfer Progress: %@", [FBCollectionInformation oneLineDescriptionFromDictionary:callbackDictionary]];
+  // [device.logger logFormat:@"Transfer Progress: %@", [FBCollectionInformation oneLineDescriptionFromDictionary:callbackDictionary]];
 }
 
 @interface FBDeviceApplicationCommands ()
