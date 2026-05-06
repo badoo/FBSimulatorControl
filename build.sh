@@ -16,6 +16,10 @@ fi
 BUILD_DIRECTORY=build
 CLI_E2E_PATH=fbsimctl/cli-tests/executable-under-test
 XCODEBUILD_LOG="$BUILD_DIRECTORY/xcodebuild.log"
+# BUILD_CONFIG selects the Xcode configuration. Defaults to Debug for fast
+# local iteration (active-arch only). Set BUILD_CONFIG=Release to produce
+# a fat universal binary (arm64 + x86_64) suitable for distribution.
+BUILD_CONFIG=${BUILD_CONFIG:-Debug}
 
 function invoke_xcodebuild() {
   local arguments=$@
@@ -88,12 +92,18 @@ function build_test_deps() {
 function framework_build() {
   local name=$1
   local output_directory=$2
+  local extra_xcb_args=()
+  if [[ "$BUILD_CONFIG" == "Release" ]]; then
+    extra_xcb_args+=(ONLY_ACTIVE_ARCH=NO ARCHS=\$\(ARCHS_STANDARD\))
+  fi
 
   invoke_xcodebuild \
     -project FBSimulatorControl.xcodeproj \
     -scheme $name \
     -sdk macosx \
+    -configuration $BUILD_CONFIG \
     -derivedDataPath $BUILD_DIRECTORY \
+    "${extra_xcb_args[@]}" \
     build
 
   if [[ -n $output_directory ]]; then
@@ -104,7 +114,7 @@ function framework_build() {
 function framework_install() {
   local name=$1
   local output_directory=$2
-  local artifact="$BUILD_DIRECTORY/Build/Products/Debug/$name.framework"
+  local artifact="$BUILD_DIRECTORY/Build/Products/$BUILD_CONFIG/$name.framework"
   local output_directory_framework="$output_directory/Frameworks"
 
   echo "Copying Build output of $artifact to $output_directory_framework"
@@ -170,7 +180,7 @@ function all_frameworks_test() {
 }
 
 function strip_framework() {
-  local FRAMEWORK_PATH="$BUILD_DIRECTORY/Build/Products/Debug/$1"
+  local FRAMEWORK_PATH="$BUILD_DIRECTORY/Build/Products/$BUILD_CONFIG/$1"
   if [ -d "$FRAMEWORK_PATH" ]; then
     echo "Stripping Framework $FRAMEWORK_PATH"
     rm -r "$FRAMEWORK_PATH"
@@ -181,12 +191,21 @@ function cli_build() {
   local name=$1
   local output_directory=$2
   local script_directory=$1/Scripts
+  # For Release: build a fat binary by overriding the active-arch-only
+  # default that's set in Configuration/Shared.xcconfig for fast Debug
+  # builds. ARCHS_STANDARD on macOS resolves to arm64 + x86_64.
+  local extra_xcb_args=()
+  if [[ "$BUILD_CONFIG" == "Release" ]]; then
+    extra_xcb_args+=(ONLY_ACTIVE_ARCH=NO ARCHS=\$\(ARCHS_STANDARD\))
+  fi
 
   invoke_xcodebuild \
     -workspace $name/$name.xcworkspace \
     -scheme $name \
     -sdk macosx \
+    -configuration $BUILD_CONFIG \
     -derivedDataPath $BUILD_DIRECTORY \
+    "${extra_xcb_args[@]}" \
     build
 
   strip_framework "FBSimulatorControlKit.framework/Versions/Current/Frameworks/FBSimulatorControl.framework"
@@ -205,8 +224,8 @@ function cli_build() {
 function cli_install() {
   local output_directory=$1
   local script_directory=$2
-  local cli_artifact="$BUILD_DIRECTORY/Build/Products/Debug/!(*.framework)"
-  local framework_artifact="$BUILD_DIRECTORY/Build/Products/Debug/*.framework"
+  local cli_artifact="$BUILD_DIRECTORY/Build/Products/$BUILD_CONFIG/!(*.framework)"
+  local framework_artifact="$BUILD_DIRECTORY/Build/Products/$BUILD_CONFIG/*.framework"
   local output_directory_cli="$output_directory/bin"
   local output_directory_framework="$output_directory/Frameworks"
 
