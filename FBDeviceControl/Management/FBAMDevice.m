@@ -164,8 +164,14 @@ static void FB_AMDeviceListenerCallback(AMDeviceNotification *notification, FBAM
   return YES;
 }
 
-static const NSTimeInterval ConnectionReuseTimeout = 10.0;
-static const NSTimeInterval ServiceReuseTimeout = 6.0;
+// Pool timeouts: warm-period kept after the last consumer drains. Larger
+// values speed up chained actions (e.g. "install -- launch") by reusing
+// the same AMDevice session/service; smaller values cut tail-end latency
+// for one-shot CLI invocations. 1.0s is a compromise — enough to bridge
+// adjacent actions in the same process, short enough that single-action
+// runs don't pay the old 10/6s wait at exit.
+static const NSTimeInterval ConnectionReuseTimeout = 1.0;
+static const NSTimeInterval ServiceReuseTimeout = 1.0;
 
 - (void)deviceConnected:(AMDeviceRef)amDevice
 {
