@@ -260,6 +260,9 @@ static const NSTimeInterval ServiceReuseTimeout = 1.0;
   calls->Release = FBGetSymbolFromHandle(handle, "AMDeviceRelease");
   calls->Retain = FBGetSymbolFromHandle(handle, "AMDeviceRetain");
   calls->SecureInstallApplication = FBGetSymbolFromHandle(handle, "AMDeviceSecureInstallApplication");
+  // Optional: present in modern MobileDevice (Xcode 14+). When NULL, the
+  // direct-IPA install path falls back to SecureTransferPath + Install.
+  calls->SecureInstallApplicationBundle = FBGetSymbolFromHandleOptional(handle, "AMDeviceSecureInstallApplicationBundle");
   calls->SecureStartService = FBGetSymbolFromHandle(handle, "AMDeviceSecureStartService");
   calls->SecureTransferPath = FBGetSymbolFromHandle(handle, "AMDeviceSecureTransferPath");
   calls->SecureUninstallApplication = FBGetSymbolFromHandle(handle, "AMDeviceSecureUninstallApplication");

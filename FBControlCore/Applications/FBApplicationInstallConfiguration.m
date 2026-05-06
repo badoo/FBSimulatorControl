@@ -13,6 +13,7 @@
 #import "FBCollectionInformation.h"
 #import "FBControlCoreError.h"
 #import "FBControlCoreGlobalConfiguration.h"
+#import "FBControlCoreLogger.h"
 #import "FBFuture+Sync.h"
 #import "FBiOSTarget.h"
 
@@ -107,6 +108,22 @@ static NSString *const KeyCodesign = @"codesign";
 
 - (FBFuture<id<FBiOSTargetContinuation>> *)runWithTarget:(id<FBiOSTarget>)target consumer:(id<FBDataConsumer>)consumer reporter:(id<FBEventReporter>)reporter
 {
+  // For .ipa inputs without codesign, pass straight through to the target.
+  // The device-side path (FBDeviceApplicationCommands) prefers the modern
+  // streaming_zip_conduit API which accepts the IPA URL directly and unzips
+  // on-device. This avoids the ~6s Mac-side extract step entirely.
+  // Codesign requires extraction (need writable .app to re-sign), so it
+  // forces the extract+install path. FBSIMCTL_LEGACY_IPA_INSTALL=1 forces
+  // extraction even when codesign is off, for diagnostics.
+  BOOL legacyForced = [NSProcessInfo.processInfo.environment[@"FBSIMCTL_LEGACY_IPA_INSTALL"] isEqualToString:@"1"];
+  BOOL passThrough = !legacyForced
+    && !self.codesign
+    && [self.applicationPath.pathExtension.lowercaseString isEqualToString:@"ipa"];
+  if (passThrough) {
+    return [[target
+      installApplicationWithPath:self.applicationPath]
+      mapReplace:FBiOSTargetContinuationDone(self.class.futureType)];
+  }
   return [[[FBApplicationBundle
     onQueue:target.asyncQueue findOrExtractApplicationAtPath:self.applicationPath logger:target.logger]
     onQueue:target.workQueue pop:^(FBApplicationBundle *applicationBundle) {

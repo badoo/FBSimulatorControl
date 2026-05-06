@@ -6,3 +6,7 @@
 INFOPLIST_FILE = $(SRCROOT)/FBDeviceControl/FBDeviceControl-Info.plist
 PRODUCT_BUNDLE_IDENTIFIER = com.facebook.FBDeviceControl
 PRODUCT_NAME = FBDeviceControl
+
+// Linked for the native streaming_zip_conduit installer (matches Xcode's
+// custom STORE-zip protocol — see FBDeviceApplicationCommands.m).
+OTHER_LDFLAGS = $(inherited) -lz

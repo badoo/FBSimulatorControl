@@ -97,6 +97,14 @@ typedef struct {
   int (*SecureStartService)(AMDeviceRef device, CFStringRef service_name, _Nullable CFDictionaryRef userinfo, CFTypeRef *serviceOut);
   int (*SecureTransferPath)(int arg0, AMDeviceRef device, CFURLRef arg2, CFDictionaryRef arg3, _Nullable AMDeviceProgressCallback callback, void *_Nullable context);
   int (*SecureInstallApplication)(int arg0, AMDeviceRef device, CFURLRef arg2, CFDictionaryRef arg3, _Nullable AMDeviceProgressCallback callback, void *_Nullable context);
+  // Modern single-call install. Uses com.apple.streaming_zip_conduit on the
+  // device so transfer and on-device unzip happen concurrently. Significantly
+  // faster than SecureTransferPath + SecureInstallApplication for large IPAs.
+  // Signature (4 args, no leading int, no callback context) verified from
+  // mobdevim's reverse-engineered MobileDevice header:
+  //   https://github.com/DerekSelander/mobdevim
+  // NULL on older MobileDevice.framework versions; check before calling.
+  int (*_Nullable SecureInstallApplicationBundle)(AMDeviceRef device, CFURLRef bundleURL, CFDictionaryRef options, _Nullable AMDeviceProgressCallback callback);
   int (*SecureUninstallApplication)(int arg0, AMDeviceRef device, CFStringRef arg2, int arg3, _Nullable AMDeviceProgressCallback callback, void *_Nullable context);
   int (*LookupApplications)(AMDeviceRef device, CFDictionaryRef _Nullable options, CFDictionaryRef _Nonnull * _Nonnull attributesOut);
   int (*CreateHouseArrestService)(AMDeviceRef device, CFStringRef bundleID, void *_Nullable unused, AFCConnectionRef *connectionOut);
