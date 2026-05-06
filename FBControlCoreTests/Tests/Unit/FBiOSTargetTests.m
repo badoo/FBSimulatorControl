@@ -13,58 +13,44 @@
 #import "FBiOSTargetDouble.h"
 
 @interface FBiOSTargetTests : XCTestCase
-
 @end
 
 @implementation FBiOSTargetTests
 
-+ (NSArray<FBDeviceModel> *)iPhoneModels
+// Helpers — use generic constructors instead of dictionary lookups, since
+// FBiOSTargetConfiguration no longer maintains hardcoded device/OS tables.
+
++ (FBDeviceType *)deviceTypeForName:(NSString *)name
 {
-  return @[
-    FBDeviceModeliPhone4s,
-    FBDeviceModeliPhone5,
-    FBDeviceModeliPhone5c,
-    FBDeviceModeliPhone5s,
-    FBDeviceModeliPhone6,
-    FBDeviceModeliPhone6Plus,
-    FBDeviceModeliPhone6S,
-    FBDeviceModeliPhone6SPlus,
-    FBDeviceModeliPhone7,
-    FBDeviceModeliPhone7Plus,
-    FBDeviceModeliPhoneSE_1stGeneration,
-  ];
+  return [FBDeviceType genericWithName:name];
 }
 
-+ (NSArray<FBDeviceModel> *)iPadModels
++ (FBOSVersion *)osVersionForName:(NSString *)name
 {
-  return @[
-     FBDeviceModeliPad2,
-     FBDeviceModeliPadAir,
-     FBDeviceModeliPadAir2,
-     FBDeviceModeliPadPro,
-     FBDeviceModeliPadPro_12_9_Inch,
-     FBDeviceModeliPadPro_9_7_Inch,
-     FBDeviceModeliPadRetina,
-  ];
-}
-
-+ (NSArray<FBDeviceType *> *)deviceTypesForModels:(NSArray<FBDeviceModel> *)models
-{
-  NSMutableArray<FBDeviceType *> *deviceTypes = [NSMutableArray array];
-  for (FBDeviceModel model in models) {
-    [deviceTypes addObject:FBiOSTargetConfiguration.nameToDevice[model]];
-  }
-  return [deviceTypes copy];
+  return [FBOSVersion genericWithName:name];
 }
 
 + (NSArray<FBDeviceType *> *)iPhoneDeviceTypes
 {
-  return [self deviceTypesForModels:self.iPhoneModels];
+  NSArray<NSString *> *names = @[
+    @"iPhone 4s", @"iPhone 5", @"iPhone 5c", @"iPhone 5s",
+    @"iPhone 6",  @"iPhone 6 Plus", @"iPhone 6s", @"iPhone 6s Plus",
+    @"iPhone 7",  @"iPhone 7 Plus", @"iPhone SE (1st generation)",
+  ];
+  NSMutableArray *out = [NSMutableArray array];
+  for (NSString *n in names) [out addObject:[self deviceTypeForName:n]];
+  return [out copy];
 }
 
 + (NSArray<FBDeviceType *> *)iPadDeviceTypes
 {
-  return [self deviceTypesForModels:self.iPadModels];
+  NSArray<NSString *> *names = @[
+    @"iPad 2", @"iPad Air", @"iPad Air 2",
+    @"iPad Pro", @"iPad Pro (12.9-inch)", @"iPad Pro (9.7-inch)", @"iPad Retina",
+  ];
+  NSMutableArray *out = [NSMutableArray array];
+  for (NSString *n in names) [out addObject:[self deviceTypeForName:n]];
+  return [out copy];
 }
 
 - (void)testDevicesOrderedFirst
@@ -72,14 +58,14 @@
   FBiOSTargetDouble *first = [FBiOSTargetDouble new];
   first.targetType = FBiOSTargetTypeDevice;
   first.state = FBiOSTargetStateBooted;
-  first.deviceType = FBiOSTargetConfiguration.nameToDevice[FBDeviceModeliPhone6S];
-  first.osVersion = FBiOSTargetConfiguration.nameToOSVersion[FBOSVersionNameiOS_10_0];
+  first.deviceType = [FBiOSTargetTests deviceTypeForName:@"iPhone 6s"];
+  first.osVersion = [FBiOSTargetTests osVersionForName:@"iOS 10.0"];
 
   FBiOSTargetDouble *second = [FBiOSTargetDouble new];
   second.targetType = FBiOSTargetTypeSimulator;
   first.state = FBiOSTargetStateBooted;
-  second.deviceType = FBiOSTargetConfiguration.nameToDevice[FBDeviceModeliPhone6S];
-  second.osVersion = FBiOSTargetConfiguration.nameToOSVersion[FBOSVersionNameiOS_10_0];
+  second.deviceType = [FBiOSTargetTests deviceTypeForName:@"iPhone 6s"];
+  second.osVersion = [FBiOSTargetTests osVersionForName:@"iOS 10.0"];
 
   XCTAssertEqual(FBiOSTargetComparison(first, second), NSOrderedDescending);
 }
@@ -89,13 +75,13 @@
   FBiOSTargetDouble *first = [FBiOSTargetDouble new];
   first.targetType = FBiOSTargetTypeDevice;
   first.state = FBiOSTargetStateBooted;
-  first.deviceType = FBiOSTargetConfiguration.nameToDevice[FBDeviceModeliPhone6S];
-  first.osVersion = FBiOSTargetConfiguration.nameToOSVersion[FBOSVersionNameiOS_10_0];
+  first.deviceType = [FBiOSTargetTests deviceTypeForName:@"iPhone 6s"];
+  first.osVersion = [FBiOSTargetTests osVersionForName:@"iOS 10.0"];
 
   FBiOSTargetDouble *second = [FBiOSTargetDouble new];
   second.targetType = FBiOSTargetTypeDevice;
-  second.deviceType = FBiOSTargetConfiguration.nameToDevice[FBDeviceModeliPhone6S];
-  second.osVersion = FBiOSTargetConfiguration.nameToOSVersion[FBOSVersionNameiOS_10_1];
+  second.deviceType = [FBiOSTargetTests deviceTypeForName:@"iPhone 6s"];
+  second.osVersion = [FBiOSTargetTests osVersionForName:@"iOS 10.1"];
 
   XCTAssertEqual(FBiOSTargetComparison(first, second), NSOrderedAscending);
 }
@@ -115,8 +101,8 @@
     FBiOSTargetDouble *target = [FBiOSTargetDouble new];
     target.targetType = FBiOSTargetTypeDevice;
     target.state = stateNumber.unsignedIntegerValue;
-    target.deviceType = FBiOSTargetConfiguration.nameToDevice[FBDeviceModeliPhone6S];
-    target.osVersion = FBiOSTargetConfiguration.nameToOSVersion[FBOSVersionNameiOS_10_0];
+    target.deviceType = [FBiOSTargetTests deviceTypeForName:@"iPhone 6s"];
+    target.osVersion = [FBiOSTargetTests osVersionForName:@"iOS 10.0"];
     [input addObject:target];
   }
   for (NSUInteger index = 0; index < input.count; index++) {
@@ -135,7 +121,7 @@
     target.targetType = FBiOSTargetTypeDevice;
     target.state = FBiOSTargetStateBooted;
     target.deviceType = deviceType;
-    target.osVersion = FBiOSTargetConfiguration.nameToOSVersion[FBOSVersionNameiOS_10_0];
+    target.osVersion = [FBiOSTargetTests osVersionForName:@"iOS 10.0"];
     [input addObject:target];
   }
   NSArray<id<FBiOSTarget>> *output = [[input copy] sortedArrayUsingSelector:@selector(compare:)];

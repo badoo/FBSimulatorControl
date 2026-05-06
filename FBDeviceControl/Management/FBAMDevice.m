@@ -471,8 +471,12 @@ static NSString *const CacheValuesPurpose = @"cache_values";
   _productVersion = CFBridgingRelease(self.calls.CopyValue(device.amDevice, NULL, CFSTR("ProductVersion")));
 
   NSString *osVersion = [FBAMDevice osVersionForDevice:device.amDevice calls:self.calls];
-  _deviceConfiguration = FBiOSTargetConfiguration.productTypeToDevice[self->_productType];
-  _osConfiguration = FBiOSTargetConfiguration.nameToOSVersion[osVersion] ?: [FBOSVersion genericWithName:osVersion];
+  // Build configuration objects from the device-supplied strings rather than
+  // looking up a hardcoded table — MobileDevice.framework is the source of
+  // truth and this code shouldn't need editing whenever Apple ships a new
+  // iPhone or iOS version.
+  _deviceConfiguration = [FBDeviceType genericWithName:self->_productType];
+  _osConfiguration = [FBOSVersion genericWithName:osVersion];
 
   [self.logger.debug logFormat:@"Finished caching values for AMDeviceRef %@", device.amDevice];
 

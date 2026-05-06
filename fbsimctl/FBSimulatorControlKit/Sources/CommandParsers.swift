@@ -250,15 +250,11 @@ extension IndividualCreationConfiguration: Parsable {
   }
 
   static var deviceParser: Parser<FBDeviceModel> {
+    // Accept any device name; CoreSimulator/MobileDevice are authoritative
+    // at runtime, so we no longer maintain a hardcoded enumeration here.
     let desc = PrimitiveDesc(name: "device-name", desc: "Device Name.")
-
     return Parser.single(desc) { token in
-      let nameToDevice = FBiOSTargetConfiguration.nameToDevice
-      let deviceName = FBDeviceModel(rawValue: token)
-      guard let _ = nameToDevice[deviceName] else {
-        throw ParseError.custom("\(token) is not a valid device name")
-      }
-      return deviceName
+      return FBDeviceModel(rawValue: token)
     }
   }
 
@@ -273,14 +269,10 @@ extension IndividualCreationConfiguration: Parsable {
   }
 
   static var osVersionParser: Parser<FBOSVersionName> {
+    // Accept any OS version string. Same rationale as deviceParser.
     let desc = PrimitiveDesc(name: "os-version", desc: "OS Version.")
     return Parser.single(desc) { token in
-      let nameToOSVersion = FBiOSTargetConfiguration.nameToOSVersion
-      let osVersionName = FBOSVersionName(rawValue: token)
-      guard let _ = nameToOSVersion[osVersionName] else {
-        throw ParseError.custom("\(token) is not a valid device name")
-      }
-      return osVersionName
+      return FBOSVersionName(rawValue: token)
     }
   }
 

@@ -405,28 +405,13 @@ static NSString *const KeyRange = @"range";
 
 + (NSArray<FBOSVersionName> *)osVersionsFromStrings:(NSArray<NSString *> *)strings
 {
-  NSMutableArray<FBOSVersionName> *osVersions = [NSMutableArray array];
-  for (NSString *string in strings) {
-    FBOSVersion *osVersion = FBiOSTargetConfiguration.nameToOSVersion[string];
-    if (!osVersion) {
-      continue;
-    }
-    [osVersions addObject:string];
-  }
-  return [osVersions copy];
+  // Pass through — we no longer reject names that aren't in a hardcoded list.
+  return [strings copy];
 }
 
 + (NSArray<FBDeviceModel> *)devicesFromStrings:(NSArray<NSString *> *)strings
 {
-  NSMutableArray<FBDeviceModel> *devices = [NSMutableArray array];
-  for (NSString *string in strings) {
-    FBDeviceType *device = FBiOSTargetConfiguration.nameToDevice[string];
-    if (!device) {
-      continue;
-    }
-    [devices addObject:string];
-  }
-  return [devices copy];
+  return [strings copy];
 }
 
 @end

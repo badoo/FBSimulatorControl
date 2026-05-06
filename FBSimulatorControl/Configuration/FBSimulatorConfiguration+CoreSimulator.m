@@ -48,23 +48,12 @@
 
 + (instancetype)inferSimulatorConfigurationFromDevice:(SimDevice *)simDevice error:(NSError **)error
 {
-  FBOSVersionName osName = simDevice.runtime.name;
-  FBOSVersion *osVersion = FBiOSTargetConfiguration.nameToOSVersion[osName];
-  if (!osVersion) {
-    return [[FBSimulatorError
-      describeFormat:@"Could not obtain OS Version for %@, perhaps it is unsupported by FBSimulatorControl", osName]
-      fail:error];
-  }
-  FBDeviceModel model = simDevice.deviceType.name;
-  FBDeviceType *deviceType = FBiOSTargetConfiguration.nameToDevice[model];
-  if (!deviceType) {
-    return [[FBSimulatorError
-      describeFormat:@"Could not obtain Device for for %@, perhaps it is unsupported by FBSimulatorControl", model]
-      fail:error];
-  }
+  // Trust whatever names CoreSimulator returns — it's authoritative for the
+  // host's installed runtimes/devices. We accept any string and build a
+  // generic FBOSVersion / FBDeviceType from it.
   return [[FBSimulatorConfiguration.defaultConfiguration
-    withOSNamed:osName]
-    withDeviceModel:model];
+    withOSNamed:simDevice.runtime.name]
+    withDeviceModel:simDevice.deviceType.name];
 }
 
 + (instancetype)inferSimulatorConfigurationFromDeviceSynthesizingMissing:(SimDevice *)simDevice
@@ -141,22 +130,11 @@
       continue;
     }
     FBOSVersionName osName = runtime.name;
-    if (!FBiOSTargetConfiguration.nameToOSVersion[runtime.name]) {
-      [absentOSVersions addObject:runtime.name];
-      continue;
-    }
-
     for (SimDeviceType *deviceType in deviceTypes) {
       if (![runtime supportsDeviceType:deviceType]) {
         continue;
       }
-      FBDeviceModel model = deviceType.name;
-      if (!FBiOSTargetConfiguration.nameToDevice[model]) {
-        [absentDeviceTypes addObject:deviceType.name];
-        continue;
-      }
-
-      FBSimulatorConfiguration *configuration = [[FBSimulatorConfiguration withDeviceModel:model] withOSNamed:osName];
+      FBSimulatorConfiguration *configuration = [[FBSimulatorConfiguration withDeviceModel:deviceType.name] withOSNamed:osName];
       [configurations addObject:configuration];
     }
   }
@@ -211,11 +189,7 @@
 {
   NSMutableArray<FBOSVersion *> *array = [NSMutableArray array];
   for (SimRuntime *runtime in runtimes) {
-    FBOSVersion *os = FBiOSTargetConfiguration.nameToOSVersion[runtime.name];
-    if (!os) {
-      os = [FBOSVersion genericWithName:runtime.name];
-    }
-    [array addObject:os];
+    [array addObject:[FBOSVersion genericWithName:runtime.name]];
   }
   return [array copy];
 }

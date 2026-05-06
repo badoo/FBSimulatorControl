@@ -53,14 +53,17 @@
 
 + (instancetype)makeDefaultConfiguration
 {
-  FBDeviceModel model = FBDeviceModeliPhone6;
-  FBDeviceType *device = FBiOSTargetConfiguration.nameToDevice[model];
+  // No specific model is "the default" anymore — pick a recent iPhone
+  // by name and let genericWithName: build a compatible FBDeviceType. The
+  // host's installed CoreSimulator runtimes will narrow down what's
+  // actually bootable at runtime.
+  FBDeviceModel model = @"iPhone 16";
+  FBDeviceType *device = [FBDeviceType genericWithName:model];
   FBOSVersion *os = [FBSimulatorConfiguration newestAvailableOSForDevice:device];
   NSAssert(
     os,
-    @"Could not obtain OS for model '%@'. Supported OS Versions for Model %@. All Available OS Versions %@",
+    @"Could not obtain OS for model '%@'. Available OS versions: %@",
     model,
-    [FBCollectionInformation oneLineDescriptionFromArray:[FBSimulatorConfiguration supportedOSVersionsForDevice:device]],
     [FBCollectionInformation oneLineDescriptionFromArray:[FBSimulatorConfiguration supportedOSVersions]]
   );
   return [[FBSimulatorConfiguration alloc] initWithNamedDevice:device os:os auxillaryDirectory:nil];
@@ -156,9 +159,7 @@
 
 - (instancetype)withDeviceModel:(FBDeviceModel)model
 {
-  FBDeviceType *device = FBiOSTargetConfiguration.nameToDevice[model];
-  device = device ?: [FBDeviceType genericWithName:model];
-  return [self withDevice:device];
+  return [self withDevice:[FBDeviceType genericWithName:model]];
 }
 
 #pragma mark - OS Versions
@@ -181,9 +182,7 @@
 
 - (instancetype)withOSNamed:(FBOSVersionName)osName
 {
-  FBOSVersion *os = FBiOSTargetConfiguration.nameToOSVersion[osName];
-  os = os ?: [FBOSVersion genericWithName:osName];
-  return [self withOS:os];
+  return [self withOS:[FBOSVersion genericWithName:osName]];
 }
 
 #pragma mark Auxillary Directory
