@@ -446,7 +446,13 @@
 
 - (NSString *)description
 {
-  return self.logString;
+  static NSDateFormatter *timestampFormatter;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    timestampFormatter = [[NSDateFormatter alloc] init];
+    timestampFormatter.dateFormat = @"HH:mm:ss.SSS";
+  });
+  return [NSString stringWithFormat:@"%@ %@", [timestampFormatter stringFromDate:NSDate.date], self.logString];
 }
 
 - (NSString *)levelString

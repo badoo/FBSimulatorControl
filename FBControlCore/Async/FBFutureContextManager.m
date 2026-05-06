@@ -65,14 +65,14 @@
       [self cancelTimer:logger];
       FBFuture<id> *context = self.context;
       if (context.hasCompleted) {
-        [logger logFormat:@"Re-Using existing context %@", context.result];
+        [logger.debug logFormat:@"Re-Using existing context %@", context.result];
         return [FBFuture futureWithResult:context.result];
       }
       if (context) {
-        [logger logFormat:@"Re-Using preparing context %@", context];
+        [logger.debug logFormat:@"Re-Using preparing context %@", context];
         return context;
       }
-      [logger log:@"No active context, preparing..."];
+      [logger.debug log:@"No active context, preparing..."];
       context = [self.delegate prepare:logger];
       self.context = context;
       return context;
@@ -90,14 +90,14 @@
         NSNumber *poolTimeout = self.delegate.contextPoolTimeout;
         if (poolTimeout) {
           NSTimeInterval timeout = poolTimeout.doubleValue;
-          [logger logFormat:@"No more consumers, but pooling the context, will wait for %f seconds of inactivity before tearing down", timeout];
+          [logger.debug logFormat:@"No more consumers, but pooling the context, will wait for %f seconds of inactivity before tearing down", timeout];
           [self teardownInFuture:timeout logger:logger];
         } else {
-          [logger log:@"No more consumers, no timeout tearing down context now"];
+          [logger.debug log:@"No more consumers, no timeout tearing down context now"];
           [self teardownNow:logger];
         }
       } else {
-        [logger logFormat:@"%lu More consumers waiting or running, not tearing down", remainingConsumers];
+        [logger.debug logFormat:@"%lu More consumers waiting or running, not tearing down", remainingConsumers];
       }
     }];
 }
@@ -152,18 +152,18 @@
     onQueue:self.queue resolve:^ FBFuture<NSUUID *> * {
       if (self.using.count > 0) {
         if (self.delegate.isContextSharable) {
-          [logger logFormat:@"Context '%@' in use, but it can be shared", self.delegate.contextName];
+          [logger.debug logFormat:@"Context '%@' in use, but it can be shared", self.delegate.contextName];
           return [self immedateResourceAvailable:uuid];
         } else {
-          [logger logFormat:@"Context '%@' currently in use, waiting for it to be available", self.delegate.contextName];
+          [logger.debug logFormat:@"Context '%@' currently in use, waiting for it to be available", self.delegate.contextName];
           return [self pushPending:uuid];
         }
       }
       if (self.context) {
-        [logger logFormat:@"No user of context '%@' but we don't need to re-aquire it", self.delegate.contextName];
+        [logger.debug logFormat:@"No user of context '%@' but we don't need to re-aquire it", self.delegate.contextName];
         return [self immedateResourceAvailable:uuid];
       }
-      [logger logFormat:@"Context '%@' not in use, time to aquire it", self.delegate.contextName];
+      [logger.debug logFormat:@"Context '%@' not in use, time to aquire it", self.delegate.contextName];
       return [self immedateResourceAvailable:uuid];
     }];
 }
@@ -219,9 +219,9 @@
         return;
       }
       if (weakSelf.using.count > 0) {
-        [logger logFormat:@"Not tearing down context after %f seconds as we have an existing consumer", timeout];
+        [logger.debug logFormat:@"Not tearing down context after %f seconds as we have an existing consumer", timeout];
       } else {
-        [logger logFormat:@"No-one else wants the context, tearing it down"];
+        [logger.debug logFormat:@"No-one else wants the context, tearing it down"];
         [weakSelf teardownNow:logger];
       }
     }];
@@ -230,7 +230,7 @@
 - (void)cancelTimer:(id<FBControlCoreLogger>)logger
 {
   if (self.teardownTimeout) {
-    [logger logFormat:@"Cancelling timer for old timeout"];
+    [logger.debug logFormat:@"Cancelling timer for old timeout"];
     [self.teardownTimeout cancel];
     self.teardownTimeout = nil;
   }
@@ -240,10 +240,10 @@
 {
   id result = self.context.result;
   if (!result) {
-    [logger log:@"Nothing to teardown"];
+    [logger.debug log:@"Nothing to teardown"];
     return;
   }
-  [logger logFormat:@"Tearing down context %@ now", result];
+  [logger.debug logFormat:@"Tearing down context %@ now", result];
   [self.delegate teardown:result logger:logger];
   self.context = nil;
 }

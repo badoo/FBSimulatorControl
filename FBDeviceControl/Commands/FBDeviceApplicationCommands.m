@@ -26,12 +26,12 @@ static void UninstallCallback(NSDictionary<NSString *, id> *callbackDictionary, 
 
 static void InstallCallback(NSDictionary<NSString *, id> *callbackDictionary, FBAMDevice *device)
 {
-  [device.logger logFormat:@"Install Progress: %@", [FBCollectionInformation oneLineDescriptionFromDictionary:callbackDictionary]];
+  [device.logger.debug logFormat:@"Install Progress: %@", [FBCollectionInformation oneLineDescriptionFromDictionary:callbackDictionary]];
 }
 
 static void TransferCallback(NSDictionary<NSString *, id> *callbackDictionary, FBAMDevice *device)
 {
-  // [device.logger logFormat:@"Transfer Progress: %@", [FBCollectionInformation oneLineDescriptionFromDictionary:callbackDictionary]];
+  [device.logger.debug logFormat:@"Transfer Progress: %@", [FBCollectionInformation oneLineDescriptionFromDictionary:callbackDictionary]];
 }
 
 @interface FBDeviceApplicationCommands ()
@@ -188,6 +188,8 @@ static void TransferCallback(NSDictionary<NSString *, id> *callbackDictionary, F
 - (FBFuture<NSNull *> *)transferAppURL:(NSURL *)appURL options:(NSDictionary *)options
 {
   return [FBFuture onQueue:self.device.workQueue resolve:^ {
+    [self.device.logger logFormat:@"Transferring %@ to device", appURL.lastPathComponent];
+    CFAbsoluteTime started = CFAbsoluteTimeGetCurrent();
     int status = self.device.amDevice.calls.SecureTransferPath(
       0,
       self.device.amDevice.amDevice,
@@ -196,12 +198,15 @@ static void TransferCallback(NSDictionary<NSString *, id> *callbackDictionary, F
       (AMDeviceProgressCallback) TransferCallback,
       (__bridge void *) (self.device.amDevice)
     );
+    NSTimeInterval elapsed = CFAbsoluteTimeGetCurrent() - started;
     if (status != 0) {
       NSString *internalMessage = CFBridgingRelease(self.device.amDevice.calls.CopyErrorText(status));
+      [self.device.logger logFormat:@"Transfer failed for %@ after %.2fs: %@", appURL.lastPathComponent, elapsed, internalMessage];
       return [[FBDeviceControlError
         describeFormat:@"Failed to transfer '%@' with error (%@)", appURL, internalMessage]
         failFuture];
     }
+    [self.device.logger logFormat:@"Transferred %@ to device in %.2fs", appURL.lastPathComponent, elapsed];
     return [FBFuture futureWithResult:NSNull.null];
   }];
 }
@@ -212,6 +217,7 @@ static void TransferCallback(NSDictionary<NSString *, id> *callbackDictionary, F
     connectToDeviceWithPurpose:@"install"]
     onQueue:self.device.workQueue pop:^(FBAMDevice *device) {
       [self.device.logger logFormat:@"Installing Application %@", appURL];
+      CFAbsoluteTime started = CFAbsoluteTimeGetCurrent();
       int status = self.device.amDevice.calls.SecureInstallApplication(
         0,
         device.amDevice,
@@ -220,13 +226,15 @@ static void TransferCallback(NSDictionary<NSString *, id> *callbackDictionary, F
         (AMDeviceProgressCallback) InstallCallback,
         (__bridge void *) (self.device.amDevice)
       );
+      NSTimeInterval elapsed = CFAbsoluteTimeGetCurrent() - started;
       if (status != 0) {
         NSString *errorMessage = CFBridgingRelease(self.device.amDevice.calls.CopyErrorText(status));
+        [self.device.logger logFormat:@"Install failed for %@ after %.2fs: %@", [appURL lastPathComponent], elapsed, errorMessage];
         return [[FBDeviceControlError
           describeFormat:@"Failed to install application %@ (%@)", [appURL lastPathComponent], errorMessage]
           failFuture];
       }
-      [self.device.logger logFormat:@"Installed Application %@", appURL];
+      [self.device.logger logFormat:@"Installed Application %@ in %.2fs", appURL, elapsed];
       return [FBFuture futureWithResult:NSNull.null];
     }];
 }

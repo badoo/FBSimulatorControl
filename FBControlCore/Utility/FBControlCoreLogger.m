@@ -318,7 +318,9 @@
 + (id<FBControlCoreLogger>)loggerToFileHandle:(NSFileHandle *)fileHandle
 {
   id<FBDataConsumer> consumer = [FBFileWriter syncWriterWithFileHandle:fileHandle];
-  return [[FBControlCoreLogger_Consumer alloc] initWithConsumer:consumer name:nil dateFormatter:nil];
+  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+  dateFormatter.dateFormat = @"HH:mm:ss.SSS";
+  return [[FBControlCoreLogger_Consumer alloc] initWithConsumer:consumer name:nil dateFormatter:dateFormatter];
 }
 
 + (NSString *)loggableStringLine:(NSString *)string

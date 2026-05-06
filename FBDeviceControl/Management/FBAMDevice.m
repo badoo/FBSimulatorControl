@@ -169,7 +169,7 @@ static const NSTimeInterval ServiceReuseTimeout = 6.0;
 
 - (void)deviceConnected:(AMDeviceRef)amDevice
 {
-  [self.logger logFormat:@"Device Connected %@", amDevice];
+  [self.logger.debug logFormat:@"Device Connected %@", amDevice];
   NSString *udid = CFBridgingRelease(self.calls.CopyDeviceIdentifier(amDevice));
   FBAMDevice *device = self.devices[udid];
   if (!device) {
@@ -178,27 +178,27 @@ static const NSTimeInterval ServiceReuseTimeout = 6.0;
   }
   AMDeviceRef oldDevice = device.amDevice;
   if (oldDevice == NULL) {
-    [self.logger logFormat:@"New Device '%@' appeared for the first time", amDevice];
+    [self.logger.debug logFormat:@"New Device '%@' appeared for the first time", amDevice];
     device.amDevice = amDevice;
   } else if (amDevice != oldDevice) {
-    [self.logger logFormat:@"New Device '%@' replaces Old Device '%@'", amDevice, oldDevice];
+    [self.logger.debug logFormat:@"New Device '%@' replaces Old Device '%@'", amDevice, oldDevice];
     device.amDevice = amDevice;
   } else {
-    [self.logger logFormat:@"Existing Device %@ is the same as the old", amDevice];
+    [self.logger.debug logFormat:@"Existing Device %@ is the same as the old", amDevice];
   }
   [NSNotificationCenter.defaultCenter postNotificationName:FBAMDeviceNotificationNameDeviceAttached object:device.udid];
 }
 
 - (void)deviceDisconnected:(AMDeviceRef)amDevice
 {
-  [self.logger logFormat:@"Device Disconnected %@", amDevice];
+  [self.logger.debug logFormat:@"Device Disconnected %@", amDevice];
   NSString *udid = CFBridgingRelease(self.calls.CopyDeviceIdentifier(amDevice));
   FBAMDevice *device = self.devices[udid];
   if (!device) {
-    [self.logger logFormat:@"No Device named %@ from inflated devices, nothing to remove", udid];
+    [self.logger.debug logFormat:@"No Device named %@ from inflated devices, nothing to remove", udid];
     return;
   } 
-  [self.logger logFormat:@"Removing Device %@ from inflated devices", udid];
+  [self.logger.debug logFormat:@"Removing Device %@ from inflated devices", udid];
   [self.devices removeObjectForKey:udid];
   [NSNotificationCenter.defaultCenter postNotificationName:FBAMDeviceNotificationNameDeviceDetached object:device.udid];
 }
@@ -395,7 +395,7 @@ static const NSTimeInterval ServiceReuseTimeout = 6.0;
       failFuture];
   }
 
-  [logger log:@"Connecting to AMDevice"];
+  [logger.debug log:@"Connecting to AMDevice"];
   int status = self.calls.Connect(amDevice);
   if (status != 0) {
     NSString *errorDescription = CFBridgingRelease(self.calls.CopyErrorText(status));
@@ -404,7 +404,7 @@ static const NSTimeInterval ServiceReuseTimeout = 6.0;
       failFuture];
   }
 
-  [logger log:@"Starting Session on AMDevice"];
+  [logger.debug log:@"Starting Session on AMDevice"];
   status = self.calls.StartSession(amDevice);
   if (status != 0) {
     self.calls.Disconnect(amDevice);
@@ -414,20 +414,20 @@ static const NSTimeInterval ServiceReuseTimeout = 6.0;
       failFuture];
   }
 
-  [logger log:@"Device ready for use"];
+  [logger.debug log:@"Device ready for use"];
   return [FBFuture futureWithResult:self];
 }
 
 - (FBFuture<NSNull *> *)teardown:(FBAMDevice *)device logger:(id<FBControlCoreLogger>)logger;
 {
   AMDeviceRef amDevice = device.amDevice;
-  [logger log:@"Stopping Session on AMDevice"];
+  [logger.debug log:@"Stopping Session on AMDevice"];
   self.calls.StopSession(amDevice);
 
-  [logger log:@"Disconnecting from AMDevice"];
+  [logger.debug log:@"Disconnecting from AMDevice"];
   self.calls.Disconnect(amDevice);
 
-  [logger log:@"Disconnected from AMDevice"];
+  [logger.debug log:@"Disconnected from AMDevice"];
 
   return [FBFuture futureWithResult:NSNull.null];
 }
@@ -450,7 +450,7 @@ static NSString *const CacheValuesPurpose = @"cache_values";
 {
   NSError *error = nil;
   FBAMDevice *device = [self.connectionContextManager utilizeNowWithPurpose:CacheValuesPurpose error:&error];
-  [self.logger logFormat:@"Caching values for AMDeviceRef %@", device.amDevice];
+  [self.logger.debug logFormat:@"Caching values for AMDeviceRef %@", device.amDevice];
   if (!device) {
     return NO;
   }
@@ -465,7 +465,7 @@ static NSString *const CacheValuesPurpose = @"cache_values";
   _deviceConfiguration = FBiOSTargetConfiguration.productTypeToDevice[self->_productType];
   _osConfiguration = FBiOSTargetConfiguration.nameToOSVersion[osVersion] ?: [FBOSVersion genericWithName:osVersion];
 
-  [self.logger logFormat:@"Finished caching values for AMDeviceRef %@", device.amDevice];
+  [self.logger.debug logFormat:@"Finished caching values for AMDeviceRef %@", device.amDevice];
 
   if (![self.connectionContextManager returnNowWithPurpose:CacheValuesPurpose error:nil]) {
     return NO;

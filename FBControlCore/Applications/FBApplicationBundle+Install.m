@@ -36,12 +36,15 @@ static BOOL deleteDirectory(NSURL *path)
   if ([FBApplicationBundle isApplicationAtPath:path]) {
     return [FBFutureContext futureContextWithFuture:[self extractedApplicationAtPath:path directory:nil]];
   }
+  [logger logFormat:@"Extracting %@", path.lastPathComponent];
+  __block CFAbsoluteTime extractStarted = CFAbsoluteTimeGetCurrent();
   return [[[self
     temporaryExtractPathWithQueue:queue logger:logger]
     onQueue:queue pend:^(NSURL *extractPath) {
       return [[FBArchiveOperations extractArchiveAtPath:path toPath:extractPath.path queue:queue logger:logger] mapReplace:extractPath];
     }]
     onQueue:queue pend:^(NSURL *extractPath) {
+      [logger logFormat:@"Extracted %@ in %.2fs", path.lastPathComponent, CFAbsoluteTimeGetCurrent() - extractStarted];
       return [FBApplicationBundle findAppPathFromDirectory:extractPath];
     }];
 }

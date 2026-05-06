@@ -139,4 +139,23 @@ typedef NS_ENUM(NSUInteger, FBControlCoreLogLevel) {
 
 @end
 
+/**
+ Time a block, logging "<label> took <seconds>s" at info level on completion.
+
+ Usage:
+   FBTime(self.logger, @"app install", ^{
+     [self doInstall];
+   });
+
+ The block runs synchronously on the calling thread. For async work that
+ returns FBFuture, capture CFAbsoluteTimeGetCurrent() manually at the
+ boundaries — see FBDeviceApplicationCommands.m's transferAppURL: for the
+ pattern.
+ */
+NS_INLINE void FBTime(id<FBControlCoreLogger> logger, NSString *label, void (^block)(void)) {
+  CFAbsoluteTime started = CFAbsoluteTimeGetCurrent();
+  block();
+  [logger logFormat:@"%@ took %.3fs", label, CFAbsoluteTimeGetCurrent() - started];
+}
+
 NS_ASSUME_NONNULL_END
