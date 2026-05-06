@@ -9,19 +9,23 @@
 set -e
 set -o pipefail
 
-if hash xcpretty 2>/dev/null; then
+if [[ -z "${NO_XCPRETTY:-}" ]] && hash xcpretty 2>/dev/null; then
   HAS_XCPRETTY=true
 fi
 
 BUILD_DIRECTORY=build
 CLI_E2E_PATH=fbsimctl/cli-tests/executable-under-test
+XCODEBUILD_LOG="$BUILD_DIRECTORY/xcodebuild.log"
 
 function invoke_xcodebuild() {
   local arguments=$@
+  mkdir -p "$BUILD_DIRECTORY"
   if [[ -n $HAS_XCPRETTY ]]; then
-    NSUnbufferedIO=YES xcodebuild $arguments | xcpretty -c
+    NSUnbufferedIO=YES xcodebuild $arguments 2>&1 | tee -a "$XCODEBUILD_LOG" | xcpretty -c
+    return ${PIPESTATUS[0]}
   else
-    xcodebuild $arguments
+    xcodebuild $arguments 2>&1 | tee -a "$XCODEBUILD_LOG"
+    return ${PIPESTATUS[0]}
   fi
 }
 
@@ -33,11 +37,40 @@ function assert_has_carthage() {
   fi
 }
 
+# Carthage dependencies (GCDWebServer 3.3.3, OCMock 2.2.4) ship .xcodeproj
+# files with deployment targets predating Xcode 14's removal of
+# libarclite_macosx.a, plus -Werror on deprecation warnings that newer
+# SDKs trip. Inject an xcconfig raising the floor and disabling
+# warnings-as-errors. Also strip non-Mac shared schemes from the dep
+# checkouts before building, since `carthage build --platform Mac`
+# filters output copies but still tries to build every shared scheme.
+# Set CUSTOM_FBSIMCTL_DEPS_SCRIPT / CUSTOM_TEST_DEPS_SCRIPT to bypass.
+function carthage_bootstrap_compat() {
+  assert_has_carthage
+  local xcconfig
+  xcconfig=$(mktemp -t fbsimctl-carthage-xcconfig)
+  cat > "$xcconfig" <<'EOF'
+MACOSX_DEPLOYMENT_TARGET = 10.13
+GCC_TREAT_WARNINGS_AS_ERRORS = NO
+SWIFT_TREAT_WARNINGS_AS_ERRORS = NO
+EOF
+  carthage checkout
+  # Remove non-Mac shared schemes so `carthage build` skips them entirely.
+  find Carthage/Checkouts -type d -name xcschemes 2>/dev/null \
+    | while read -r dir; do
+        find "$dir" -type f \
+          \( -name "*iOS*.xcscheme" \
+          -o -name "*tvOS*.xcscheme" \
+          -o -name "*watchOS*.xcscheme" \
+          -o -name "*visionOS*.xcscheme" \) -delete
+      done
+  XCODE_XCCONFIG_FILE="$xcconfig" carthage build --platform Mac
+}
+
 function build_fbsimctl_deps() {
   if [ -z "$CUSTOM_FBSIMCTL_DEPS_SCRIPT" ]; then
-    assert_has_carthage
     pushd fbsimctl
-    carthage bootstrap --platform Mac
+    carthage_bootstrap_compat
     popd
   else
     "$CUSTOM_FBSIMCTL_DEPS_SCRIPT"
@@ -46,8 +79,7 @@ function build_fbsimctl_deps() {
 
 function build_test_deps() {
   if [ -z "$CUSTOM_TEST_DEPS_SCRIPT" ]; then
-    assert_has_carthage
-    carthage bootstrap --platform Mac
+    carthage_bootstrap_compat
   else
     "$CUSTOM_TEST_DEPS_SCRIPT"
   fi

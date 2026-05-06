@@ -212,7 +212,7 @@ static NSString *const KeyY = @"y";
       describeFormat:@"%@ is not a valid event type", typeString]
       fail:error];
   }
-  return [[self alloc] initWithDirection:type x:x.unsignedIntegerValue y:y.unsignedIntegerValue];
+  return [[self alloc] initWithDirection:type x:(double)x.unsignedIntegerValue y:(double)y.unsignedIntegerValue];
 }
 
 - (id)jsonSerializableRepresentation
@@ -355,7 +355,7 @@ static NSString *const ButtonSiri = @"siri";
 
 - (NSUInteger)hash
 {
-  return self.type ^ self.button;
+  return (NSUInteger)self.type ^ (NSUInteger)self.button;
 }
 
 + (NSString *)buttonStringFromButton:(FBSimulatorHIDButton)button

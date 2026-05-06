@@ -91,7 +91,7 @@ static NSString *const KeyIsAwaiting = @"FBCONTROLCORE_IS_AWAITING";
 
 static NSTimeInterval const ForeverTimeout = DBL_MAX;
 
-static dispatch_queue_t blockQueue()
+static dispatch_queue_t blockQueue(void)
 {
   return dispatch_queue_create("com.facebook.fbfuture.block", DISPATCH_QUEUE_SERIAL);
 }
@@ -135,7 +135,7 @@ static dispatch_queue_t blockQueue()
     dispatch_group_leave(group);
   }];
   BOOL completed = dispatch_group_wait(group, timeout) == 0;
-  return ExtractResult(self, timeout, completed, error);
+  return ExtractResult(self, (NSTimeInterval)timeout, completed, error);
 }
 
 @end
