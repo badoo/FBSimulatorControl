@@ -250,10 +250,17 @@ extension IndividualCreationConfiguration: Parsable {
   }
 
   static var deviceParser: Parser<FBDeviceModel> {
-    // Accept any device name; CoreSimulator/MobileDevice are authoritative
-    // at runtime, so we no longer maintain a hardcoded enumeration here.
-    let desc = PrimitiveDesc(name: "device-name", desc: "Device Name.")
+    // We no longer validate against a hardcoded enumeration, but we still
+    // need a shape filter so the parser doesn't greedily eat unrelated
+    // tokens (like action names) when used in an `accumulate` alternative
+    // — we accept any token that *looks like* a device name by matching
+    // the well-known family prefixes.
+    let desc = PrimitiveDesc(name: "device-name", desc: "Device Name (e.g. \"iPhone 16\", \"iPad Pro\").")
+    let prefixes = ["iPhone", "iPad", "Apple TV", "Apple Watch", "Mac"]
     return Parser.single(desc) { token in
+      guard prefixes.contains(where: { token.hasPrefix($0) }) else {
+        throw ParseError.custom("\(token) is not a device name (no recognised family prefix)")
+      }
       return FBDeviceModel(rawValue: token)
     }
   }
@@ -269,9 +276,15 @@ extension IndividualCreationConfiguration: Parsable {
   }
 
   static var osVersionParser: Parser<FBOSVersionName> {
-    // Accept any OS version string. Same rationale as deviceParser.
-    let desc = PrimitiveDesc(name: "os-version", desc: "OS Version.")
+    // Same shape-filter rationale as deviceParser: accept any OS name that
+    // begins with a known platform prefix, so action tokens don't get
+    // accidentally consumed.
+    let desc = PrimitiveDesc(name: "os-version", desc: "OS Version (e.g. \"iOS 18.1\", \"tvOS 18.1\").")
+    let prefixes = ["iOS", "tvOS", "watchOS", "macOS", "OSX"]
     return Parser.single(desc) { token in
+      guard prefixes.contains(where: { token.hasPrefix($0) }) else {
+        throw ParseError.custom("\(token) is not an OS version (no recognised platform prefix)")
+      }
       return FBOSVersionName(rawValue: token)
     }
   }
