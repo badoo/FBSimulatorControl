@@ -6,6 +6,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <stdio.h>
 
 @import FBSimulatorControlKit;
 
@@ -16,6 +17,11 @@
  As fbsimctl is a pure Objective-C Target, it doesn't need to statically link the 'swift_static' libs.
  */
 int main(int argc, const char *argv[]) {
+  // Build banner — written direct to stderr at the very start so every run
+  // self-identifies which binary is executing. __DATE__ / __TIME__ are
+  // baked at compile time of THIS source file (main.m), so they accurately
+  // reflect when the binary was built.
+  fprintf(stderr, "fbsimctl built " __DATE__ " " __TIME__ "\n");
   @autoreleasepool
   {
     return [CLIBootstrapper bootstrap];

@@ -403,6 +403,23 @@ static NSArray<SZCIPAEntry *> *SZCParseIPAEntries(NSData *ipa, NSError **error)
   return entries;
 }
 
+// Quickly check whether an IPA contains any ".appex/" entry (an iOS app
+// extension). Used by installApplicationWithPath: to decide whether the
+// streaming path can handle the bundle: it currently can't preserve the
+// per-entry unix mode bits that Apple's signature verifier requires for
+// .appex sub-bundles, so those IPAs route to the legacy install path
+// instead. Reads only the central directory; doesn't inflate any entries.
+static BOOL SZCContainsAppex(NSString *ipaPath)
+{
+  NSData *ipa = [NSData dataWithContentsOfFile:ipaPath options:NSDataReadingMappedAlways error:nil];
+  if (!ipa) return NO;
+  NSArray<SZCIPAEntry *> *entries = SZCParseIPAEntries(ipa, nil);
+  for (SZCIPAEntry *e in entries) {
+    if ([e.name containsString:@".appex/"]) return YES;
+  }
+  return NO;
+}
+
 // Returns the offset of compressed data for an entry by parsing the local
 // file header (we cannot rely on the central directory offset alone because
 // the local header has its own variable-length name + extra fields).
@@ -445,9 +462,14 @@ static BOOL SZCStreamEntry(SZCSender *sender, NSData *ipa, SZCIPAEntry *entry, N
   const uint8_t *src = (const uint8_t *)ipa.bytes + dataOff;
 
   if (entry.method == 0) {
-    // STORE — bytes already uncompressed in the IPA. Wrap as a zero-copy
-    // NSData over the mmap'd region; the IPA stays alive for the whole
-    // install so the underlying memory remains valid until we flush.
+    // STORE — bytes already uncompressed in the IPA. Verify CRC against
+    // the CD's recorded value before sending; mismatch means we located
+    // the wrong region in the IPA (bad headerOffset / data offset arithmetic).
+    uint32_t actualCRC = (uint32_t)crc32(0, src, (uInt)entry.uncompressedSize);
+    if (entry.crc32 != 0 && actualCRC != entry.crc32) {
+      if (error) *error = [NSError errorWithDomain:kDomain code:39 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"STORE CRC mismatch for %@: expected 0x%08x got 0x%08x", entry.name, entry.crc32, actualCRC]}];
+      return NO;
+    }
     NSData *passthrough = [NSData dataWithBytesNoCopy:(void *)src length:entry.uncompressedSize freeWhenDone:NO];
     if (![sender sendData:passthrough]) {
       if (error) *error = [NSError errorWithDomain:kDomain code:33 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"STORE send failed for %@ (size=%u)", entry.name, entry.uncompressedSize]}];
@@ -474,6 +496,7 @@ static BOOL SZCStreamEntry(SZCSender *sender, NSData *ipa, SZCIPAEntry *entry, N
   }
   static const size_t kChunk = 64 * 1024;
   uint64_t emitted = 0;
+  uint32_t actualCRC = 0;
   rc = Z_OK;
   while (rc != Z_STREAM_END) {
     void *outBuf = malloc(kChunk);
@@ -490,6 +513,10 @@ static BOOL SZCStreamEntry(SZCSender *sender, NSData *ipa, SZCIPAEntry *entry, N
     }
     size_t produced = kChunk - zs.avail_out;
     if (produced > 0) {
+      // Update the running CRC over the inflated bytes BEFORE handing the
+      // buffer to the (potentially async) sender — sender may free it from
+      // another thread once the chunk is on the wire.
+      actualCRC = (uint32_t)crc32(actualCRC, outBuf, (uInt)produced);
       NSData *chunk = [NSData dataWithBytesNoCopy:outBuf length:produced freeWhenDone:YES];
       if (![sender sendData:chunk]) {
         inflateEnd(&zs);
@@ -504,6 +531,10 @@ static BOOL SZCStreamEntry(SZCSender *sender, NSData *ipa, SZCIPAEntry *entry, N
   inflateEnd(&zs);
   if (emitted != entry.uncompressedSize) {
     if (error) *error = [NSError errorWithDomain:kDomain code:38 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"size mismatch for %@: emitted=%llu uncompressed=%u", entry.name, emitted, entry.uncompressedSize]}];
+    return NO;
+  }
+  if (entry.crc32 != 0 && actualCRC != entry.crc32) {
+    if (error) *error = [NSError errorWithDomain:kDomain code:40 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"DEFLATE CRC mismatch for %@: expected 0x%08x got 0x%08x", entry.name, entry.crc32, actualCRC]}];
     return NO;
   }
   return YES;
@@ -572,20 +603,29 @@ static NSDictionary *SZCInitTransferPlist(NSString *ipaName)
 
 - (FBFuture<NSNull *> *)installApplicationWithPath:(NSString *)path
 {
-  // Three install paths, picked by env var (and by the input file type):
+  // Install path selection:
   //
-  //   default for .ipa  → nativeStreamingInstallAtPath: (com.apple.streaming_zip_conduit
-  //                       protocol, no Apple-framework conversion overhead;
-  //                       ~60s on USB 2.0 for a 1.27 GB unzipped app)
+  //   default for .ipa, no appex   → nativeStreamingInstallAtPath:
+  //                                   (com.apple.streaming_zip_conduit protocol,
+  //                                   fastest path on USB 2.0)
+  //
+  //   .ipa containing any *.appex  → falls back to the legacy two-step pair.
+  //                                   The streaming protocol's STORE-zip framing
+  //                                   doesn't preserve per-entry unix mode bits,
+  //                                   and Apple's code-signature verifier rejects
+  //                                   bundles where an .appex's main binary
+  //                                   doesn't land with the +x bit. Override
+  //                                   with FBSIMCTL_STREAMING_FORCE=1 to keep
+  //                                   the streaming path even with appex.
   //
   //   FBSIMCTL_STREAMING_INSTALL=1 → Apple's AMDeviceSecureInstallApplicationBundle
-  //                                  (also streaming_zip_conduit but with extra
-  //                                  host-side ZIP→streamable conversion; slower)
+  //                                  (also streaming_zip_conduit but goes through
+  //                                  Apple's wrapper that does extra host-side
+  //                                  conversion).
   //
-  //   FBSIMCTL_LEGACY_INSTALL=1, or for .app input → SecureTransferPath +
-  //                                                  SecureInstallApplication
-  //                                                  (the original two-step path;
-  //                                                  ~89s for the same IPA)
+  //   FBSIMCTL_LEGACY_INSTALL=1,
+  //   or for .app input            → SecureTransferPath + SecureInstallApplication
+  //                                  (the original two-step path).
   BOOL isIPA = [path.pathExtension.lowercaseString isEqualToString:@"ipa"];
   NSString *absolutePath = path.stringByStandardizingPath;
   if (![absolutePath isAbsolutePath]) {
@@ -594,10 +634,20 @@ static NSDictionary *SZCInitTransferPlist(NSString *ipaName)
   NSDictionary *env = NSProcessInfo.processInfo.environment;
   BOOL legacy    = [env[@"FBSIMCTL_LEGACY_INSTALL"]    isEqualToString:@"1"];
   BOOL streaming = [env[@"FBSIMCTL_STREAMING_INSTALL"] isEqualToString:@"1"];
+  BOOL forceStream = [env[@"FBSIMCTL_STREAMING_FORCE"] isEqualToString:@"1"];
 
+  fprintf(stderr, "[fbsimctl-debug] installApplicationWithPath: path=%s isIPA=%d legacy=%d streaming=%d forceStream=%d\n",
+    absolutePath.UTF8String, isIPA, legacy, streaming, forceStream);
   if (isIPA && !legacy && !streaming) {
-    return [self nativeStreamingInstallAtPath:absolutePath];
+    BOOL hasAppex = SZCContainsAppex(absolutePath);
+    fprintf(stderr, "[fbsimctl-debug] hasAppex=%d for %s\n", hasAppex, absolutePath.UTF8String);
+    [self.device.logger logFormat:@"install: path=%@ isIPA=%d hasAppex=%d forceStream=%d", absolutePath, isIPA, hasAppex, forceStream];
+    if (forceStream || !hasAppex) {
+      return [self nativeStreamingInstallAtPath:absolutePath];
+    }
+    [self.device.logger logFormat:@"%@ contains a .appex — falling back to legacy install (streaming_zip_conduit drops per-entry mode bits, which breaks Apple's signature verifier on app extensions). Set FBSIMCTL_STREAMING_FORCE=1 to override.", absolutePath.lastPathComponent];
   }
+
   NSURL *appURL = [NSURL fileURLWithPath:absolutePath isDirectory:!isIPA];
   NSDictionary *options = @{@"PackageType" : @"Developer"};
   if (streaming && self.device.amDevice.calls.SecureInstallApplicationBundle != NULL) {
