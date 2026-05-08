@@ -636,12 +636,8 @@ static NSDictionary *SZCInitTransferPlist(NSString *ipaName)
   BOOL streaming = [env[@"FBSIMCTL_STREAMING_INSTALL"] isEqualToString:@"1"];
   BOOL forceStream = [env[@"FBSIMCTL_STREAMING_FORCE"] isEqualToString:@"1"];
 
-  fprintf(stderr, "[fbsimctl-debug] installApplicationWithPath: path=%s isIPA=%d legacy=%d streaming=%d forceStream=%d\n",
-    absolutePath.UTF8String, isIPA, legacy, streaming, forceStream);
   if (isIPA && !legacy && !streaming) {
     BOOL hasAppex = SZCContainsAppex(absolutePath);
-    fprintf(stderr, "[fbsimctl-debug] hasAppex=%d for %s\n", hasAppex, absolutePath.UTF8String);
-    [self.device.logger logFormat:@"install: path=%@ isIPA=%d hasAppex=%d forceStream=%d", absolutePath, isIPA, hasAppex, forceStream];
     if (forceStream || !hasAppex) {
       return [self nativeStreamingInstallAtPath:absolutePath];
     }
