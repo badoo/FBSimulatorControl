@@ -54,7 +54,9 @@ function carthage_bootstrap_compat() {
   local xcconfig
   xcconfig=$(mktemp -t fbsimctl-carthage-xcconfig)
   cat > "$xcconfig" <<'EOF'
-MACOSX_DEPLOYMENT_TARGET = 10.13
+MACOSX_DEPLOYMENT_TARGET = 12.0
+ARCHS = arm64
+EXCLUDED_ARCHS = x86_64
 GCC_TREAT_WARNINGS_AS_ERRORS = NO
 SWIFT_TREAT_WARNINGS_AS_ERRORS = NO
 EOF
@@ -94,7 +96,7 @@ function framework_build() {
   local output_directory=$2
   local extra_xcb_args=()
   if [[ "$BUILD_CONFIG" == "Release" ]]; then
-    extra_xcb_args+=(ONLY_ACTIVE_ARCH=NO ARCHS=\$\(ARCHS_STANDARD\))
+    extra_xcb_args+=(ONLY_ACTIVE_ARCH=YES ARCHS=arm64)
   fi
 
   invoke_xcodebuild \
@@ -196,7 +198,7 @@ function cli_build() {
   # builds. ARCHS_STANDARD on macOS resolves to arm64 + x86_64.
   local extra_xcb_args=()
   if [[ "$BUILD_CONFIG" == "Release" ]]; then
-    extra_xcb_args+=(ONLY_ACTIVE_ARCH=NO ARCHS=\$\(ARCHS_STANDARD\))
+    extra_xcb_args+=(ONLY_ACTIVE_ARCH=YES ARCHS=arm64)
   fi
 
   invoke_xcodebuild \
